@@ -1,21 +1,26 @@
-//
-//  ContentView.swift
-//  StatDota
-//
-//  Created by Temirlan Zhumashov on 23.11.2025.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    @State var search = ""
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Text("Добавить в друзья")
+                .foregroundStyle(.white)//#A6AAAB
+            TextField(text: $search) {
+                Text("Поиск по ID")
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
+            }
+            .background(.black)
+            .border(.searchTextFieldBorder, width: 2)
+            HStack(spacing: 0) {
+                SearchButton()
+                Spacer()
+                SearchButton()
+            }
         }
-        .padding()
+        .padding(40)
+        .background(Color.gray)//#282D2F
     }
 }
 
