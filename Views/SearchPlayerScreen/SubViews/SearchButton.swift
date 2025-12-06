@@ -11,13 +11,14 @@ struct SearchButton: View {
     var text: String
     var body: some View {
         Text(text)
-            .foregroundStyle(.searchTextFieldText)
+            .foregroundStyle(.white)
             .frame(width: 150, height: 50)
             .background(
                 LinearGradient(
                     stops: [
-                        Gradient.Stop(color: .searchButtonBackgroundGradientStart, location: 0.1),
-                        Gradient.Stop(color: .searchButtonBackgroundGradientEnd, location: 0.7)
+                        Gradient.Stop(color: .searchButtonBackgroundGradientStart, location: 0.05),
+                        Gradient.Stop(color: .searchButtonBackgroundGradientMiddle, location: 0.5),
+                        Gradient.Stop(color: .searchButtonBackgroundGradientEnd, location: 1)
                     ],
                     startPoint: .top,
                     endPoint: .bottom
