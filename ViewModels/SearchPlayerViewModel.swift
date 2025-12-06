@@ -1,13 +1,14 @@
 import Foundation
 import SwiftUI
-class MainViewModel: ObservableObject {
+class SearchPlayerViewModel: ObservableObject {
     
     @Published var player: Profile?
     @Published var errorMessage = ""
     @Published var searchID: String = ""
+    
     func getPlayer(id: Int) {
         NetworkManager.shared.fetchProfile(id: id) { [weak self] result in
-            DispatchQueue.main.async { [self] in
+            DispatchQueue.main.async {
                 switch result {
                 case .success(let player):
                     self?.player = player
@@ -17,8 +18,8 @@ class MainViewModel: ObservableObject {
                 }
             }
         }
-        ImageLoader.shared.loadImage(imageURL: player?.avatarmedium ?? "")
     }
+    
     func handleError(error: NetworkError) -> String {
         switch error {
         case .notFoundPlayerID:
