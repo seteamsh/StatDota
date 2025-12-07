@@ -15,9 +15,7 @@ struct Profile: Decodable {
         case lastLogin = "last_login"
     }
 }
-struct APIErrorResponse: Decodable {
-    let error: String
-}
-struct Employee: Decodable {
+
+struct Wrapper: Decodable {
     let profile: Profile
 }

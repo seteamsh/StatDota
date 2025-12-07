@@ -4,30 +4,24 @@ class SearchPlayerViewModel: ObservableObject {
     
     @Published var player: Profile?
     @Published var errorMessage = ""
-    @Published var searchID: String = ""
+    @Published var searchID: String = "117124649"
     
     func getPlayer(id: Int) {
-        NetworkManager.shared.fetchProfile(id: id) { [weak self] result in
+        NetworkManager.shared.fetchProfile(id: id) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let player):
-                    self?.player = player
+                    self.player = player
+                    self.errorMessage = ""
                 case .failure(let networkError):
-                    self?.errorMessage = self?.handleError(error: networkError) ?? ""
-                    self?.player = nil
+                    self.errorMessage = handleError(error: networkError)
+                    self.player = nil
                 }
             }
         }
     }
-    
-    func handleError(error: NetworkError) -> String {
-        switch error {
-        case .notFoundPlayerID:
-            return "Профиль не найден"
-        case .noData:
-            return "Нет данных"
-        case .decodingError:
-            return "Ошибка декодирования"
-        }
+
+    deinit {
+        print("SearchPlayerViewModel deinited")
     }
 }
