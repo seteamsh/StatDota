@@ -2,42 +2,74 @@ import SwiftUI
 
 struct ProfileView: View {
     @StateObject var vm = ProfileViewModel()
-    @State var isTurbo = true
-   
+    @State var isTurbo = false
+    
     let profile: Profile
     var body: some View {
         VStack {
-            HStack(spacing: 20) {
-                VStack {
-                    AsyncImage(url: URL(string: profile.avatarfull)) { image in
-                        image.resizable()
-                    } placeholder: {
-                        ProgressView()
-                    }
-                    .scaledToFit()
-                    .frame(width: 160, height: 140)
+            HStack(spacing: 5) {
+                AsyncImage(url: URL(string: profile.avatarfull)) { image in
+                    image.resizable()
+                } placeholder: {
+                    ProgressView()
                 }
+                .scaledToFit()
+                .frame(width: UIScreen.main.bounds.width / 2)
+                //.border(.red, width: 2)
                 VStack(alignment: .leading, spacing: 5) {
                     Text(profile.personaname)
                         .font(.title)
-                    Text("WINS: \(vm.win)")
-                    Text("LOSSES: \(vm.lose)")
-                    Text("WINRATE: 50.45%")
+                    HStack {
+                        Text("WINS")
+                        Text("\(vm.win)")
+                    }
+                    HStack {
+                        Text("LOSE")
+                        Text("\(vm.lose)")
+                    }
+                    HStack {
+                        Text("WINRATE")
+                        Text("\(String(format: "%.2f", vm.winRate))%")
+                    }
                     HStack(spacing: 20) {
                         Text("TURBO")
                         Toggle("", isOn: $isTurbo)
+                            .onChange(of: isTurbo) {
+                                vm.loadWinLose(id: profile.accountId, isTurbo: isTurbo)
+                            }
                     }
                     .labelsHidden()
                 }
+                .frame(width: UIScreen.main.bounds.width / 2, alignment: .leading)
+                //.border(.blue, width: 2)
             }
-            .padding(.horizontal, 20)
+            .frame(height: UIScreen.main.bounds.height / 5)
+            //.border(.black, width: 2)
+            
+            ScrollView(.horizontal) {
+                HStack(spacing: 10) {
+                    Button {
+                        
+                    } label: {
+                        Text("Heroes")
+                            .foregroundStyle(.white)
+                            .padding(10)
+                            .background(.black)
+                            .clipShape(.buttonBorder)
+                    }
+                    Button {
+                        
+                    } label: {
+                        Text("Matches")
+                            .foregroundStyle(.white)
+                            .padding(10)
+                            .background(.black)
+                            .clipShape(.buttonBorder)
+                    }
+                }
+                .padding(20)
+            }
             Spacer()
-            Button {
-                vm.loadWinLose(id: profile.accountId, isTurbo: isTurbo)
-            } label: {
-                Text("Press")
-            }
-
         }
         .onAppear {
             vm.loadWinLose(id: profile.accountId, isTurbo: isTurbo)

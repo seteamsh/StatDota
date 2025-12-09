@@ -35,16 +35,36 @@ final class NetworkManager: ObservableObject {
             } else {
                 let httpResponse = response as? HTTPURLResponse
                 print(httpResponse?.statusCode ?? "")
-                    guard let safeData = data else {
-                        return completion(.failure(.noData))
-                    }
-                    do {
-                        let winLose = try JSONDecoder().decode(WinLose.self, from: safeData)
-                        completion(.success(winLose))
-                    } catch {
-                        completion(.failure(.decodingError))
-                    }
+                guard let safeData = data else {
+                    return completion(.failure(.noData))
+                }
+                do {
+                    let winLose = try JSONDecoder().decode(WinLose.self, from: safeData)
+                    completion(.success(winLose))
+                } catch {
+                    completion(.failure(.decodingError))
+                }
                 
+            }
+        }.resume()
+    }
+    func fetchHeroes(completion: @escaping (Result<[Hero], NetworkError>) -> Void) {
+        let url = URL(string: "https://api.opendota.com/api/heroes")!
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if error != nil {
+                completion(.failure(.noData))
+            }
+            guard let httpResponse = response as? HTTPURLResponse else {
+                return completion(.failure(.badResponse))
+            }
+            guard let safeData = data else {
+                return completion(.failure(.noData))
+            }
+            do {
+                let decodedData = try JSONDecoder().decode([Hero].self, from: safeData)
+                completion(.success(decodedData))
+            } catch {
+                completion(.failure(.decodingError))
             }
         }.resume()
     }
