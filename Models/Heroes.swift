@@ -1,7 +1,7 @@
 import Foundation
 
 // MARK: - Hero
-struct Hero: Codable {
+struct Hero: Decodable {
     let id: Int
     let name, localizedName: String
     let primaryAttr: PrimaryAttr

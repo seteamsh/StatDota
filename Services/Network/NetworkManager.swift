@@ -28,7 +28,7 @@ final class NetworkManager: ObservableObject {
         }.resume()
     }
     func fetchWinLose(id: Int, gameMode: GameMode, completion: @escaping (Result<WinLose, NetworkError>) -> Void) {
-        let url = URL(string: "https://api.opendota.com/api/players/\(id)/wl?significant=0\(gameMode.mode)game_mode=23")!
+        let url = URL(string: "https://api.opendota.com/api/players/\(id)/wl\(gameMode.mode)")!
         URLSession.shared.dataTask(with: url) { data, response, error in
             if error != nil {
                 return completion(.failure(.noData))
@@ -54,7 +54,7 @@ final class NetworkManager: ObservableObject {
             if error != nil {
                 completion(.failure(.noData))
             }
-            guard let httpResponse = response as? HTTPURLResponse else {
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
                 return completion(.failure(.badResponse))
             }
             guard let safeData = data else {
@@ -65,6 +65,27 @@ final class NetworkManager: ObservableObject {
                 completion(.success(decodedData))
             } catch {
                 completion(.failure(.decodingError))
+            }
+        }.resume()
+    }
+    func fetchPlayerHeroes(id: Int, gameMode: GameMode, completion: @escaping (Result<[PlayerHeroes], NetworkError>) -> Void) {
+        let url = URL(string: "https://api.opendota.com/api/players/\(id)/heroes\(gameMode.mode)")!
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if error != nil {
+                completion(.failure(.noData))
+            }
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                return completion(.failure(.badResponse))
+            }
+            guard let safeData = data else {
+                return completion(.failure(.noData))
+            }
+            do {
+                let decodedData = try JSONDecoder().decode([PlayerHeroes].self, from: safeData)
+                completion(.success(decodedData))
+            } catch {
+                completion(.failure(.decodingError))
+
             }
         }.resume()
     }

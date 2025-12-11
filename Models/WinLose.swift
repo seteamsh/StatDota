@@ -9,8 +9,8 @@ enum GameMode {
     
     var mode: String {
         switch self {
-        case .turbo: return "&"
-        case .allPick: return "?"
+        case .turbo: return "?game_mode=23&significant=0"
+        case .allPick: return ""
         }
     }
 }
