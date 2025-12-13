@@ -1,9 +1,9 @@
 import SwiftUI
 
 class ProfileViewModel: ObservableObject {
-    @Published var win = 1
-    @Published var lose = 1
-    @Published var winRate: Double = 0
+    @Published var win: Int?
+    @Published var lose: Int?
+    @Published var winRate: Double?
     @Published var errorMessage: String?
     
     func loadWinLose(id: Int, isTurbo: Bool) {

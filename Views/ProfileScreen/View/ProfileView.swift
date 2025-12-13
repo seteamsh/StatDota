@@ -22,20 +22,32 @@ struct ProfileView: View {
                             .font(.title)
                         HStack {
                             Text("WINS")
-                            Text("\(vm.win)")
+                            if let win = vm.win {
+                                Text("\(win)")
+                            } else {
+                                ProgressView()
+                            }
                         }
                         HStack {
                             Text("LOSE")
-                            Text("\(vm.lose)")
+                            if let lose = vm.lose {
+                                Text("\(lose)")
+                            } else {
+                                ProgressView()
+                            }
                         }
                         HStack {
                             Text("WINRATE")
-                            Text("\(String(format: "%.2f", vm.winRate))%")
+                            if let winRate = vm.winRate {
+                                Text("\(String(format: "%.2f", winRate))%")
+                            } else {
+                                ProgressView()
+                            }
                         }
                         HStack(spacing: 20) {
                             Text("TURBO")
                             Toggle("", isOn: $isTurbo)
-                                
+                            
                         }
                         .labelsHidden()
                     }
