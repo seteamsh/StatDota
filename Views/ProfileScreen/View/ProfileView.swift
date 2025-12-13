@@ -68,6 +68,7 @@ struct ProfileView: View {
                                 .background(.black)
                                 .clipShape(.buttonBorder)
                         }
+                        .background(.background)
                         Button {
                             
                         } label: {
@@ -77,6 +78,7 @@ struct ProfileView: View {
                                 .background(.black)
                                 .clipShape(.buttonBorder)
                         }
+                        .background(.background)
                     }
                     .padding(20)
                     

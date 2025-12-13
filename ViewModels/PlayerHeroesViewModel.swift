@@ -15,6 +15,7 @@ class PlayerHeroesViewModel: ObservableObject {
     }
     
     @Published var mergedPlayerHeroes = [MergedPlayerHeroes]()
+    
     func getPlayerHeroes(id: Int, gameMode: GameMode)  {
         NetworkManager.shared.fetchPlayerHeroes(id: id, gameMode: gameMode) { result in
             DispatchQueue.main.async {
@@ -43,18 +44,15 @@ class PlayerHeroesViewModel: ObservableObject {
     
     func getMergePlayerHeroes() {
         mergedPlayerHeroes = playerHeroes.compactMap { playerHero in
-            guard let hero = heroes.first(where: { $0.id == playerHero.heroID } ) else {
-                return MergedPlayerHeroes(id: 1, name: "test", imageURL: "test", win: 1, games: 1, lastPlayed: 454, winRate: 50.00)
-            }
+            guard let heroes = heroes.first(where: { $0.id == playerHero.heroID }) else { return nil }
             return MergedPlayerHeroes(
                 id: playerHero.heroID,
-                name: hero.localizedName,
-                imageURL: hero.name,
+                name: heroes.localizedName,
+                imageURL: heroes.name,
                 win: playerHero.win,
                 games: playerHero.games,
                 lastPlayed: playerHero.lastPlayed,
-                winRate: Double(playerHero.win) / Double(playerHero.games) * 100.00
-            )
+                winRate: playerHero.games == 0 ? 0 : Double(playerHero.win) / Double(playerHero.games) * 100.00)
         }
     }
 }
