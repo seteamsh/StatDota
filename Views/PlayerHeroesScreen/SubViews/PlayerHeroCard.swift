@@ -1,16 +1,10 @@
-//
-//  PlayerHeroCard.swift
-//  StatDota
-//
-//  Created by Temirlan Zhumashov on 13.12.2025.
-//
 
 import SwiftUI
 
 struct PlayerHeroCard: View {
     var hero: MergedPlayerHeroes
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 0) {
             AsyncImage(
                 url: URL(
                     string: "https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/\(hero.imageURL.replacingOccurrences(of: "npc_dota_hero_", with: "")).png"
@@ -18,7 +12,7 @@ struct PlayerHeroCard: View {
             ) { imgae in
                 imgae
                     .resizable()
-                    .frame(width: 120, height: 68)
+                    .frame(width: 112, height: 63)
                       
             } placeholder: {
                 ZStack {
@@ -29,19 +23,27 @@ struct PlayerHeroCard: View {
                     ProgressView()
                 }
             }
-            VStack(spacing: 0) {
+            .padding(.trailing, 10)
+            VStack(alignment: .leading, spacing: 5) {
                 Text("\(hero.name)")
                 Text("\(hero.lastPlayed)")
             }
-            Text("\(hero.games)")
-            Text("\(hero.win)")
-            Text("\(String(format: "%.1f", hero.winRate))")
+            Spacer()
+            HStack(spacing: 10) {
+                Text("\(hero.games)")
+                Text("\(hero.win)")
+                Text("\(String(format: "%.1f", hero.winRate))")
+            }
+            .frame(alignment: .leading)
+            .padding(.trailing, 1)
             
         }
-        .border(.gray, width: 1)
+        
+        .frame(maxWidth: .infinity, maxHeight: 68)
+        .border(.gray.opacity(0.3), width: 1)
     }
 }
 
 #Preview {
-    PlayerHeroCard(hero: MergedPlayerHeroes(id: 1, name: "Anti-Mage", imageURL: "invoker", win: 68, games: 295, lastPlayed: 34234, winRate: 51.19))
+    PlayerHeroCard(hero: MergedPlayerHeroes(id: 1, name: "Invoker", imageURL: "invoker", win: 68, games: 3000, lastPlayed: 34234, winRate: 51.19))
 }

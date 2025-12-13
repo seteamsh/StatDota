@@ -8,15 +8,22 @@ struct ProfileView: View {
     var body: some View {
         ScrollView(.vertical) {
             VStack {
-                HStack(spacing: 5) {
+                HStack(spacing: 15) {
                     AsyncImage(url: URL(string: profile.avatarfull)) { image in
-                        image.resizable()
+                        image
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 150, height: 150)
+                            .clipShape(Circle())
                     } placeholder: {
-                        ProgressView()
+                        ZStack {
+                            Rectangle()
+                                .foregroundStyle(.background)
+                                .frame(width: 150, height: 150)
+                                .clipShape(Circle())
+                            ProgressView()
+                        }
                     }
-                    .scaledToFit()
-                    .frame(width: UIScreen.main.bounds.width / 2)
-                    //.border(.red, width: 2)
                     VStack(alignment: .leading, spacing: 5) {
                         Text(profile.personaname)
                             .font(.title)
@@ -51,12 +58,8 @@ struct ProfileView: View {
                         }
                         .labelsHidden()
                     }
-                    .frame(width: UIScreen.main.bounds.width / 2, alignment: .leading)
-                    //.border(.blue, width: 2)
+                    Spacer()
                 }
-                .frame(height: UIScreen.main.bounds.height / 5)
-                //.border(.black, width: 2)
-                
                 ScrollView(.horizontal) {
                     HStack(spacing: 10) {
                         Button {
@@ -91,6 +94,7 @@ struct ProfileView: View {
             .onAppear {
                 vm.loadWinLose(id: profile.accountId, isTurbo: isTurbo)
             }
+            .padding(.horizontal, 15)
         }
     }
 }
