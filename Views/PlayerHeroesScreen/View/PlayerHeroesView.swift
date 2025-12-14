@@ -5,7 +5,8 @@ struct PlayerHeroesView: View {
     @Binding var isTurbo: Bool
     var profile: Profile
     var body: some View {
-        VStack(spacing: 10) {
+        PlayerHeroesDescriptionCard()
+        VStack(spacing: 7) {
             ForEach(vm.mergedPlayerHeroes, id: \.id) { hero in
                 PlayerHeroCard(hero: hero)
             }

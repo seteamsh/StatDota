@@ -7,7 +7,7 @@ struct ProfileView: View {
     let profile: Profile
     var body: some View {
         ScrollView(.vertical) {
-            VStack {
+            VStack(spacing: 0) {
                 HStack(spacing: 15) {
                     AsyncImage(url: URL(string: profile.avatarfull)) { image in
                         image
@@ -60,32 +60,19 @@ struct ProfileView: View {
                     }
                     Spacer()
                 }
+                .padding(.bottom, 30)
                 ScrollView(.horizontal) {
-                    HStack(spacing: 10) {
-                        Button {
+                    HStack(spacing: 20) {
+                        SelectButton(buttonName: "Matches") {
                             
-                        } label: {
-                            Text("Heroes")
-                                .foregroundStyle(.white)
-                                .padding(10)
-                                .background(.black)
-                                .clipShape(.buttonBorder)
                         }
-                        .background(.background)
-                        Button {
+                        
+                        SelectButton(buttonName: "Heroes") {
                             
-                        } label: {
-                            Text("Matches")
-                                .foregroundStyle(.white)
-                                .padding(10)
-                                .background(.black)
-                                .clipShape(.buttonBorder)
                         }
-                        .background(.background)
                     }
-                    .padding(20)
-                    
                 }
+                .padding(.bottom, 20)
                 PlayerHeroesView(isTurbo: $isTurbo, profile: profile)
             }
             .onChange(of: isTurbo) {
@@ -94,7 +81,7 @@ struct ProfileView: View {
             .onAppear {
                 vm.loadWinLose(id: profile.accountId, isTurbo: isTurbo)
             }
-            .padding(.horizontal, 15)
+            .padding(.horizontal, 5)
         }
     }
 }

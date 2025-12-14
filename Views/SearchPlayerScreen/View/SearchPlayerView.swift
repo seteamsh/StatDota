@@ -18,7 +18,12 @@ struct SearchPlayerView: View {
                         HStack {
                             Spacer()
                             AsyncImage(url: URL(string: player.avatarmedium)) { image in
-                                image.resizable()
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 60, height: 60)
+                                    .clipped()
+                                    .clipShape(.circle)
                             } placeholder: {
                                 ProgressView()
                             }
@@ -28,8 +33,6 @@ struct SearchPlayerView: View {
                                 .font(.title)
                             Spacer()
                         }
-                        .frame(height: 60)
-                        .border(.searchTextFieldBorder, width: 2)
                     }
                     
                 } else {
