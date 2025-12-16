@@ -19,6 +19,7 @@ final class NetworkManager: ObservableObject {
                     }
                     do {
                         let decodedProfile = try JSONDecoder().decode(Wrapper.self, from: safeData)
+                        print(safeData)
                         completion(.success(decodedProfile.profile))
                     } catch {
                         completion(.failure(.decodingError))

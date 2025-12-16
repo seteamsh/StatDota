@@ -5,7 +5,7 @@ struct Profile: Decodable {
     let personaname: String
     let avatar, avatarmedium, avatarfull: String
     let profileurl: String
-    let lastLogin: String
+    let lastLogin: String?
     
     enum CodingKeys: String, CodingKey {
         case accountId = "account_id"
