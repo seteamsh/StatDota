@@ -90,8 +90,8 @@ final class NetworkManager: ObservableObject {
             }
         }.resume()
     }
-    func fetchPlayerMatches(id: Int, gameMode: GameMode, completion: @escaping (Result<[PlayerMatches], NetworkError>) -> Void) {
-        let url = URL(string: "https://api.opendota.com/api/players/\(id)/matches\(gameMode.findMatches)")!
+    func fetchPlayerMatches(id: Int, gameMode: GameMode, offset: Int = 0, completion: @escaping (Result<[PlayerMatches], NetworkError>) -> Void) {
+        let url = URL(string: "https://api.opendota.com/api/players/\(id)/matches\(gameMode.findMatches)&offset=\(offset)")!
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             if error != nil {
