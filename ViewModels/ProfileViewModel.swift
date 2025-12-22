@@ -5,10 +5,12 @@ class ProfileViewModel: ObservableObject {
     @Published var lose: Int?
     @Published var winRate: Double?
     @Published var errorMessage: String?
+    @Published var matches = [PlayerMatches]()
+    @Published var heroes = [Hero]()
+    @Published var playerHeroes = [PlayerHeroes]()
     
     func loadWinLose(id: Int, isTurbo: Bool) {
         NetworkManager.shared.fetchWinLose(id: id, gameMode: isTurbo ? .turbo : .allPick ) { result in
-            
             switch result {
             case .success(let data):
                 DispatchQueue.global(qos: .utility).async {
@@ -32,5 +34,41 @@ class ProfileViewModel: ObservableObject {
             return 0
         }
         return Double(win) / Double(win + lose) * 100
+    }
+    func getPlayerMatches(playerId: Int, gameMode: GameMode) {
+        NetworkManager.shared.fetchPlayerMatches(id: playerId, gameMode: gameMode) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let matches):
+                    self.matches = matches
+                case .failure(let error):
+                    print("Error: \(error)")
+                }
+            }
+        }
+    }
+    func getHeroes() {
+        NetworkManager.shared.fetchHeroes { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let heroes):
+                    self.heroes = heroes
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+    }
+    func getPlayerHeroes(id: Int, gameMode: GameMode)  {
+        NetworkManager.shared.fetchPlayerHeroes(id: id, gameMode: gameMode) { result in
+            DispatchQueue.main.async {
+                switch result {
+                    case .success(let data):
+                        self.playerHeroes = data
+                    case .failure(let error):
+                        self.errorMessage = handleError(error: error)
+                }
+            }
+        }
     }
 }

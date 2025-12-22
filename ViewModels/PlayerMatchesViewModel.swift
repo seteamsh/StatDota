@@ -2,26 +2,11 @@ import Foundation
 
 
 class PlayerMatchesViewModel: ObservableObject {
-    private var matches = [PlayerMatches]() {
-        didSet {
-            processMatches()
-        }
-    }
+    
+    
     @Published var processedMatches = [PlayerMatchesProcessed]()
     
-    func getPlayerMatches(playerId: Int, gameMode: GameMode) {
-        NetworkManager.shared.fetchPlayerMatches(id: playerId, gameMode: gameMode) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let matches):
-                    self.matches = matches
-                case .failure(let error):
-                    print("Error: \(error)")
-                }
-            }
-        }
-    }
-    func processMatches() {
+    func processMatches(matches: [PlayerMatches], heroes: [Hero]) {
         processedMatches = matches.map { match in
             return PlayerMatchesProcessed(
                 matchID: match.matchID,
@@ -30,7 +15,8 @@ class PlayerMatchesViewModel: ObservableObject {
                 duration: formatDuration(duration: match.duration),
                 gameMode: formatGameMode(gameMode: match.gameMode),
                 lobbyType: match.lobbyType,
-                heroID: match.heroID,
+                hero: getHero(heroId: match.heroID, heroes: heroes),
+                heroLastPlayed: match.startTime.timeAgo(),
                 startTime: match.startTime,
                 version: match.version,
                 kills: match.kills,
@@ -81,6 +67,10 @@ class PlayerMatchesViewModel: ObservableObject {
         let seconds = duration % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
+    func getHero(heroId: Int, heroes: [Hero]) -> Hero {
+        let hero = heroes.first(where: { $0.id == heroId })!
+        return hero
+    }
 }
 
 enum GameResult {
@@ -90,4 +80,16 @@ enum GameResult {
 enum PlayerSide {
     case radiant
     case dire
+}
+
+extension Int {
+    func timeAgo() -> String {
+        let date = Date(timeIntervalSince1970: TimeInterval(self))
+
+        let formatter = RelativeDateTimeFormatter()
+        formatter.locale = Locale(identifier: "ru_RU")
+        formatter.unitsStyle = .full   // .short → "5 мин назад"
+
+        return formatter.localizedString(for: date, relativeTo: Date())
+    }
 }

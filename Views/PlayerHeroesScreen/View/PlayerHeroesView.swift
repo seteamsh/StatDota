@@ -2,6 +2,7 @@ import SwiftUI
 
 struct PlayerHeroesView: View {
     @StateObject var vm = PlayerHeroesViewModel()
+    @ObservedObject var profileVM: ProfileViewModel
     @Binding var isTurbo: Bool
     var profile: Profile
     var body: some View {
@@ -11,16 +12,11 @@ struct PlayerHeroesView: View {
                 PlayerHeroCard(hero: hero)
             }
         }
-        .onChange(of: isTurbo) {
-            vm.getPlayerHeroes(id: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
-        }
-        .onAppear {
-            vm.getPlayerHeroes(id: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
-            vm.getHeroes()
+        .onChange(of: profileVM.playerHeroes) {
+            vm.getMergePlayerHeroes(playerHeroes: profileVM.playerHeroes, heroes: profileVM.heroes)
         }
     }
 }
 #Preview {
-    PlayerHeroesView(isTurbo: .constant(false), profile: Profile(accountId: 1, personaname: "test", avatar: "fdff", avatarmedium: "fdfdf", avatarfull: "dfdfdf", profileurl: "dfdf", lastLogin: "FDf"))
+    PlayerHeroesView(profileVM: ProfileViewModel(), isTurbo: .constant(false), profile: Profile(accountId: 1, personaname: "test", avatar: "fdff", avatarmedium: "fdfdf", avatarfull: "dfdfdf", profileurl: "dfdf", lastLogin: "FDf"))
 }
-

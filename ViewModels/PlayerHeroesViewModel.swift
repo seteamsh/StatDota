@@ -3,46 +3,12 @@ import Foundation
 class PlayerHeroesViewModel: ObservableObject {
     
     @Published var errorMessage: String?
-    @Published var heroes = [Hero]() {
-        didSet {
-            getMergePlayerHeroes()
-        }
-    }
-    @Published var playerHeroes = [PlayerHeroes]() {
-        didSet {
-            getMergePlayerHeroes()
-        }
-    }
+    
     
     @Published var mergedPlayerHeroes = [MergedPlayerHeroes]()
     
-    func getPlayerHeroes(id: Int, gameMode: GameMode)  {
-        NetworkManager.shared.fetchPlayerHeroes(id: id, gameMode: gameMode) { result in
-            DispatchQueue.main.async {
-                switch result {
-                    case .success(let data):
-                        self.playerHeroes = data
-                    case .failure(let error):
-                        self.errorMessage = handleError(error: error)
-                }
-            }
-        }
-    }
     
-    func getHeroes() {
-        NetworkManager.shared.fetchHeroes { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let heroes):
-                    self.heroes = heroes
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        }
-    }
-    
-    func getMergePlayerHeroes() {
+    func getMergePlayerHeroes(playerHeroes: [PlayerHeroes], heroes: [Hero]) {
         mergedPlayerHeroes = playerHeroes.compactMap { playerHero in
             guard let heroes = heroes.first(where: { $0.id == playerHero.heroID }) else { return nil }
             return MergedPlayerHeroes(

@@ -1,7 +1,7 @@
 import Foundation
 
 // MARK: - PlayerHero
-struct PlayerHeroes: Codable {
+struct PlayerHeroes: Codable, Equatable {
     let heroID, lastPlayed, games, win: Int
     let withGames, withWin, againstGames, againstWin: Int
 

@@ -73,13 +73,23 @@ struct ProfileView: View {
                     }
                 }
                 .padding(.bottom, 20)
-                PlayerHeroesView(isTurbo: $isTurbo, profile: profile)
+                //PlayerHeroesView(profileVM: vm, isTurbo: $isTurbo, profile: profile)
+                
             }
+            PlayerMatchesView(profileVM: vm)
             .onChange(of: isTurbo) {
                 vm.loadWinLose(id: profile.accountId, isTurbo: isTurbo)
+                
+                vm.getPlayerHeroes(id: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
+                vm.getPlayerMatches(playerId: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
             }
             .onAppear {
+                vm.getHeroes()
                 vm.loadWinLose(id: profile.accountId, isTurbo: isTurbo)
+               
+                vm.getPlayerMatches(playerId: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
+                
+                vm.getPlayerHeroes(id: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
             }
             .padding(.horizontal, 5)
         }

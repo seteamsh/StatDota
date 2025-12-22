@@ -1,6 +1,6 @@
 import Foundation
 
-struct PlayerMatches: Codable {
+struct PlayerMatches: Codable, Equatable {
     let matchID, playerSlot: Int
     let radiantWin: Bool?
     let duration, gameMode, lobbyType, heroID: Int
@@ -34,7 +34,9 @@ struct PlayerMatchesProcessed {
     let matchResult: GameResult?
     let duration: String
     let gameMode: GameMode
-    let lobbyType, heroID: Int
+    let lobbyType: Int
+    let hero: Hero
+    let heroLastPlayed: String
     let startTime: Int
     let version: Int?
     let kills, deaths, assists: Int
