@@ -76,7 +76,7 @@ struct ProfileView: View {
                 //PlayerHeroesView(profileVM: vm, isTurbo: $isTurbo, profile: profile)
                 
             }
-            PlayerMatchesView(profileVM: vm)
+            PlayerMatchesView(profileVM: vm, profileID: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
             .onChange(of: isTurbo) {
                 vm.loadWinLose(id: profile.accountId, isTurbo: isTurbo)
                 

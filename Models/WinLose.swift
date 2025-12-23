@@ -15,8 +15,8 @@ enum GameMode {
     }
     var findMatches: String {
         switch self {
-        case .turbo: return "?game_mode=23&significant=0&limit=20"
-        case .allPick: return "?limit=20"
+        case .turbo: return "?game_mode=23&significant=0&limit="
+        case .allPick: return "?limit="
         }
         
     }
