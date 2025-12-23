@@ -5,9 +5,15 @@ struct PlayerMatchesView: View {
     @ObservedObject var profileVM: ProfileViewModel
     var body: some View {
         ScrollView(.horizontal) {
-            ForEach(vm.processedMatches, id: \.matchID) { match in
-                LazyVStack {
+            LazyVStack {
+                ForEach(vm.processedMatches.indices, id: \.self) { index in
+                    let match = vm.processedMatches[index]
                     PlayerMatchCard(match: match)
+                        .onAppear {
+                            if index == vm.processedMatches.count - 1 {
+                                
+                            }
+                        }
                 }
             }
         }
