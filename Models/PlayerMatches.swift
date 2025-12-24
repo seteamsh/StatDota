@@ -28,7 +28,7 @@ struct PlayerMatches: Codable, Equatable {
     }
 }
 
-struct PlayerMatchesProcessed {
+struct PlayerMatchesProcessed: Equatable {
     let matchID: Int
     let playerSide: PlayerSide
     let matchResult: GameResult?
@@ -43,4 +43,14 @@ struct PlayerMatchesProcessed {
     let averageRank: Int?
     let leaverStatus: Int
     let partySize, heroVariant: Int?
+}
+
+
+enum GameResult {
+    case win
+    case lose
+}
+enum PlayerSide {
+    case radiant
+    case dire
 }

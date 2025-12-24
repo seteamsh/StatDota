@@ -2,11 +2,37 @@ import Foundation
 
 
 class PlayerMatchesViewModel: ObservableObject {
-    
-    
+    @Published var matches = [PlayerMatches]() 
+    @Published var isLoadMore = false
     @Published var processedMatches = [PlayerMatchesProcessed]()
     
-    func processMatches(matches: [PlayerMatches], heroes: [Hero]) {
+    func loadMoreIfNeeded(currentItem: PlayerMatchesProcessed, action: @escaping ()-> Void) {
+        guard !isLoadMore, currentItem == processedMatches.last else { return }
+        action()
+    }
+    
+    func getPlayerMatches(playerId: Int, gameMode: GameMode) {
+
+        NetworkManager.shared.fetchPlayerMatches(
+            id: playerId,
+            gameMode: gameMode,
+            offset: 0,
+            limit: 20
+            
+        ) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let newMatches):
+                    
+                    self.matches = newMatches
+                case .failure(let error):
+                    print("Error: \(error)")
+                }
+            }
+        }
+    }
+    
+    func processMatches(heroes: [Hero]) {
         processedMatches = matches.map { match in
             return PlayerMatchesProcessed(
                 matchID: match.matchID,
@@ -71,15 +97,6 @@ class PlayerMatchesViewModel: ObservableObject {
         let hero = heroes.first(where: { $0.id == heroId })!
         return hero
     }
-}
-
-enum GameResult {
-    case win
-    case lose
-}
-enum PlayerSide {
-    case radiant
-    case dire
 }
 
 extension Int {

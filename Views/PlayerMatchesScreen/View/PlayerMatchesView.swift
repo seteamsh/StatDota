@@ -2,29 +2,32 @@ import SwiftUI
 
 struct PlayerMatchesView: View {
     @StateObject var vm = PlayerMatchesViewModel()
-    @ObservedObject var profileVM: ProfileViewModel
+    @StateObject var profileVM: ProfileViewModel
     let profileID: Int
-    let gameMode: GameMode
+    var gameMode: GameMode
     var body: some View {
-        ScrollView(.horizontal) {
+        ScrollView {
             VStack {
-                ForEach(vm.processedMatches.indices, id: \.self) { index in
-                    let match = vm.processedMatches[index]
+                ForEach(vm.processedMatches, id: \.matchID) { match in
                     PlayerMatchCard(match: match)
-                        .onAppear {
-                            if index == vm.processedMatches.count - 1 {
-                                profileVM.getPlayerMatches(playerId: profileID, gameMode: gameMode)
-                            }
-                        }
                 }
             }
         }
-        .onChange(of: profileVM.matches) {
-            vm.processMatches(matches: profileVM.matches, heroes: profileVM.heroes)
+        .onChange(of: vm.matches) {
+            vm.processMatches(heroes: profileVM.heroes)
+        }
+        .onChange(of: gameMode) {
+            vm.getPlayerMatches(playerId: profileID, gameMode: gameMode)
+        }
+        .onAppear {
+            vm.getPlayerMatches(playerId: profileID, gameMode: gameMode)
         }
     }
 }
 
 #Preview {
-    PlayerMatchesView(profileVM: ProfileViewModel(), profileID: 117124649, gameMode: .allPick)
+    PlayerMatchesView(
+        profileVM: ProfileViewModel(), profileID: 117124649,
+        gameMode: .allPick
+    )
 }

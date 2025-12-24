@@ -10,7 +10,6 @@ import SwiftUI
 struct PlayerMatchCard: View {
     var match: PlayerMatchesProcessed
     var body: some View {
-        ScrollView(.horizontal) {
             HStack(spacing: 10) {
                 AsyncImage(
                     url: URL(
@@ -55,7 +54,7 @@ struct PlayerMatchCard: View {
             }
             .frame(maxWidth: .infinity, maxHeight: 50, alignment: .leading)
             .border(.gray.opacity(0.3), width: 1)
-        }
+        
     }
 }
 

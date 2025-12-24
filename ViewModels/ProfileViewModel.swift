@@ -5,15 +5,11 @@ class ProfileViewModel: ObservableObject {
     @Published var lose: Int?
     @Published var winRate: Double?
     @Published var errorMessage: String?
-    @Published var matches = [PlayerMatches]()
     @Published var heroes = [Hero]()
     @Published var playerHeroes = [PlayerHeroes]()
     
-    private var pigeSize = 20
-    private var offset = 0
-    private var isLoading = false
-    private var hasMore = true
     
+    private var canLoadMore = true
     func loadWinLose(id: Int, isTurbo: Bool) {
         NetworkManager.shared.fetchWinLose(id: id, gameMode: isTurbo ? .turbo : .allPick ) { result in
             switch result {
@@ -40,32 +36,10 @@ class ProfileViewModel: ObservableObject {
         }
         return Double(win) / Double(win + lose) * 100
     }
-    func getPlayerMatches(playerId: Int, gameMode: GameMode, offset: Int = 0) {
-        guard !isLoading else { return }
-        isLoading = true
-        
-        NetworkManager.shared.fetchPlayerMatches(
-            id: playerId,
-            gameMode: gameMode,
-            offset: offset,
-            limit: pigeSize
-            
-        ) { result in
-            DispatchQueue.main.async {
-                self.isLoading = false
-                switch result {
-                case .success(let matches):
-                    self.matches.append(contentsOf: matches)
-                    self.offset += matches.count
-                    if matches.count < self.pigeSize {
-                        self.hasMore = false
-                    }
-                case .failure(let error):
-                    print("Error: \(error)")
-                }
-            }
-        }
-    }
+    
+    
+    
+    
     func getHeroes() {
         NetworkManager.shared.fetchHeroes { result in
             DispatchQueue.main.async {
