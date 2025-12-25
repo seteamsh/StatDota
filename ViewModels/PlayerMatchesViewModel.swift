@@ -6,8 +6,8 @@ class PlayerMatchesViewModel: ObservableObject {
     @Published var isLoadMore = false
     @Published var processedMatches = [PlayerMatchesProcessed]()
     
-    private var offset: Int = 0
-    private var limit : Int = 5
+    var offset: Int = 0
+    private var limit : Int = 20
     var isLoading = false
     var canLoadMore = true
     
@@ -32,6 +32,7 @@ class PlayerMatchesViewModel: ObservableObject {
                         self.canLoadMore = false
                     } else {
                         self.matches.append(contentsOf: newMatches)
+                        self.offset += self.limit
                     }
                     self.isLoading = false
                     print(self.processedMatches.count)
@@ -39,16 +40,6 @@ class PlayerMatchesViewModel: ObservableObject {
                     print("Error: \(error)")
                 }
             }
-        }
-    }
-    func loadMatchesIfNeeded(id: Int, gameMode: GameMode,currentItem: PlayerMatchesProcessed?) {
-        guard let currentItem = currentItem else {
-            getPlayerMatches(playerId: id, gameMode: gameMode)
-            return
-        }
-        let tresholdIndex = processedMatches.index(processedMatches.endIndex, offsetBy: -1)
-        if processedMatches.firstIndex(where: { $0.matchID == currentItem.matchID}) == tresholdIndex {
-            getPlayerMatches(playerId: id, gameMode: gameMode)
         }
     }
     
