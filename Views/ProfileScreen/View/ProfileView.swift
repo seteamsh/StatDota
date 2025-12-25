@@ -7,7 +7,7 @@ struct ProfileView: View {
     let profile: Profile
     var body: some View {
         ScrollView(.vertical) {
-            VStack(spacing: 0) {
+            LazyVStack(spacing: 0) {
                 HStack(spacing: 15) {
                     AsyncImage(url: URL(string: profile.avatarfull)) { image in
                         image
@@ -79,12 +79,12 @@ struct ProfileView: View {
             PlayerMatchesView(profileVM: vm, profileID: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
             .onChange(of: isTurbo) {
                 vm.loadWinLose(id: profile.accountId, isTurbo: isTurbo)
-                vm.getPlayerHeroes(id: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
+                //vm.getPlayerHeroes(id: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
             }
             .onAppear {
                 vm.getHeroes()
                 vm.loadWinLose(id: profile.accountId, isTurbo: isTurbo)
-                vm.getPlayerHeroes(id: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
+                //vm.getPlayerHeroes(id: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
             }
             .padding(.horizontal, 5)
         }

@@ -1,34 +1,54 @@
 import Foundation
 
-
 class PlayerMatchesViewModel: ObservableObject {
-    @Published var matches = [PlayerMatches]() 
+    //MARK: Properties--
+    @Published var matches = [PlayerMatches]()
     @Published var isLoadMore = false
     @Published var processedMatches = [PlayerMatchesProcessed]()
     
-    func loadMoreIfNeeded(currentItem: PlayerMatchesProcessed, action: @escaping ()-> Void) {
-        guard !isLoadMore, currentItem == processedMatches.last else { return }
-        action()
-    }
+    private var offset: Int = 0
+    private var limit : Int = 5
+    var isLoading = false
+    var canLoadMore = true
+    
+    //MARK: Methods--
+    
     
     func getPlayerMatches(playerId: Int, gameMode: GameMode) {
-
+        guard !isLoading, canLoadMore else { return }
+        isLoading = true
+        
         NetworkManager.shared.fetchPlayerMatches(
             id: playerId,
             gameMode: gameMode,
-            offset: 0,
-            limit: 20
+            offset: matches.count,
+            limit: limit
             
         ) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let newMatches):
-                    
-                    self.matches = newMatches
+                    if newMatches.isEmpty {
+                        self.canLoadMore = false
+                    } else {
+                        self.matches.append(contentsOf: newMatches)
+                    }
+                    self.isLoading = false
+                    print(self.processedMatches.count)
                 case .failure(let error):
                     print("Error: \(error)")
                 }
             }
+        }
+    }
+    func loadMatchesIfNeeded(id: Int, gameMode: GameMode,currentItem: PlayerMatchesProcessed?) {
+        guard let currentItem = currentItem else {
+            getPlayerMatches(playerId: id, gameMode: gameMode)
+            return
+        }
+        let tresholdIndex = processedMatches.index(processedMatches.endIndex, offsetBy: -1)
+        if processedMatches.firstIndex(where: { $0.matchID == currentItem.matchID}) == tresholdIndex {
+            getPlayerMatches(playerId: id, gameMode: gameMode)
         }
     }
     
