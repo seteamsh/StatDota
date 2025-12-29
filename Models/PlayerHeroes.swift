@@ -16,7 +16,7 @@ struct PlayerHeroes: Codable, Equatable {
     }
 }
 
-struct MergedPlayerHeroes {
+struct MergedPlayerHeroes: Equatable {
     let id: Int
     let name: String
     let imageURL: String

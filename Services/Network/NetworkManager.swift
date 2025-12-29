@@ -112,4 +112,26 @@ final class NetworkManager: ObservableObject {
             }
         }.resume()
     }
+//    func fetchItems(completion: @escaping (Result<[Item], NetworkError>) -> Void) {
+//        let url = URL(string: "https://api.opendota.com/api/constants/items")!
+//        URLSession.shared.dataTask(with: url) { data, response, error in
+//            if error != nil {
+//                completion(.failure(.noData))
+//            }
+//            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+//                completion(.failure(.badResponse))
+//                return
+//            }
+//            guard let safeData = data else {
+//                completion(.failure(.noData))
+//                return
+//            }
+//            do {
+//                let decodedData = try JSONDecoder().decode([Item].self, from: safeData)
+//            } catch {
+//                completion(.failure(.decodingError))
+//            }
+//            
+//        }
+//    }
 }

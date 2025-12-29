@@ -43,6 +43,7 @@ struct PlayerMatchesProcessed: Equatable {
     let averageRank: Int?
     let leaverStatus: Int
     let partySize, heroVariant: Int?
+    //let items: [Item]
 }
 
 

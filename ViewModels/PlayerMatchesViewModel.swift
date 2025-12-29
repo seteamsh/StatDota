@@ -3,6 +3,7 @@ import Foundation
 class PlayerMatchesViewModel: ObservableObject {
     //MARK: Properties--
     @Published var matches = [PlayerMatches]()
+    @Published var items = [Item]()
     @Published var isLoadMore = false
     @Published var processedMatches = [PlayerMatchesProcessed]()
     
@@ -13,6 +14,16 @@ class PlayerMatchesViewModel: ObservableObject {
     
     //MARK: Methods--
     
+//    func getItems() {
+//        NetworkManager.shared.fetchItems { result in
+//            switch result {
+//            case .success(let items):
+//                self.items = items
+//            case .failure(let error):
+//                print(error)
+//            }
+//        }
+//    }
     
     func getPlayerMatches(playerId: Int, gameMode: GameMode) {
         guard !isLoading, canLoadMore else { return }
@@ -63,6 +74,7 @@ class PlayerMatchesViewModel: ObservableObject {
                 leaverStatus: match.leaverStatus,
                 partySize: match.partySize,
                 heroVariant: match.heroVariant
+                //items: <#T##[Item]#>
             )
         }
     }
@@ -73,6 +85,10 @@ class PlayerMatchesViewModel: ObservableObject {
             return .dire
         }
     }
+    
+//    func getItem(itemId: Int) -> Item {
+//        return
+//    }
         
     func getGameResult(radiantWin: Bool?, playerSlot: Int) -> GameResult? {
         let playerSide = getPlayerSide(playerSlot: playerSlot)

@@ -13,7 +13,7 @@ struct SelectButton: View {
     var action: () -> Void
     var body: some View {
         Button {
-            
+            action()
         } label: {
             Text(buttonName)
                 .font(.title3)

@@ -67,7 +67,8 @@ struct PlayerMatchCard: View {
             duration: "32141",
             gameMode: .allPick,
             lobbyType: 234,
-            hero: Hero(id: 1, name: "invoker", localizedName: "Outworld Destroyer", primaryAttr: .agi, attackType: .melee, roles: [.carry], legs: 23), heroLastPlayed: "9 лет назад",
+            hero: Hero(id: 1, name: "invoker", localizedName: "Outworld Destroyer", primaryAttr: .agi, attackType: .melee, roles: [.carry], legs: 23),
+            heroLastPlayed: "9 лет назад",
             startTime: 2341,
             version: 23432,
             kills: 23,
@@ -76,7 +77,14 @@ struct PlayerMatchCard: View {
             averageRank: 342,
             leaverStatus: 234,
             partySize: 3432,
-            heroVariant: 234
+            heroVariant: 234//,
+//            items: [
+//                Item(
+//                    id: 1,
+//                    img: "https://cdn.steamstatic.com/apps/dota2/images/dota_react/items/blink.png?t=1593393829403"
+//                )
+//
+//            ]
         )
     )
 }
