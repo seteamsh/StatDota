@@ -4,34 +4,37 @@
 //
 //  Created by Temirlan Zhumashov on 21.12.2025.
 //
-
+import Kingfisher
 import SwiftUI
 
 struct PlayerMatchCard: View {
     var match: PlayerMatchesProcessed
     var body: some View {
             HStack(spacing: 10) {
-                AsyncImage(
-                    url: URL(
-                        string: "https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/\(match.hero.name.replacingOccurrences(of: "npc_dota_hero_", with: "")).png"
-                    )
-                ) { imgae in
-                    imgae
-                        .resizable()
-                        .frame(width: 88, height: 50)
-                    
-                } placeholder: {
-                    ZStack {
-                        Rectangle()
-                            .foregroundStyle(.background)
-                            .frame(width: 88, height: 50)
-                        Image(systemName: "person")
-                            .font(Font.system(size: 45))
-                            .foregroundStyle(.gray)
-                            .opacity(0.3)
-                        ProgressView()
-                    }
-                }
+                KFImage(URL(string: "https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/\(match.hero.name.replacingOccurrences(of: "npc_dota_hero_", with: "")).png"))
+                    .resizable()
+                    .frame(width: 88, height: 50)
+//                AsyncImage(
+//                    url: URL(
+//                        string: "https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/\(match.hero.name.replacingOccurrences(of: "npc_dota_hero_", with: "")).png"
+//                    )
+//                ) { imgae in
+//                    imgae
+//                        .resizable()
+//                        .frame(width: 88, height: 50)
+//                    
+//                } placeholder: {
+//                    ZStack {
+//                        Rectangle()
+//                            .foregroundStyle(.background)
+//                            .frame(width: 88, height: 50)
+//                        Image(systemName: "person")
+//                            .font(Font.system(size: 45))
+//                            .foregroundStyle(.gray)
+//                            .opacity(0.3)
+//                        ProgressView()
+//                    }
+//                }
                 .padding(.trailing, -5)
                 VStack(alignment: .leading) {
                     Text("\(match.hero.localizedName)")
