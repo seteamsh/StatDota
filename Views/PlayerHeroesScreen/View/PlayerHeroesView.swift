@@ -15,6 +15,9 @@ struct PlayerHeroesView: View {
         .onChange(of: profileVM.playerHeroes) {
             vm.getMergePlayerHeroes(playerHeroes: profileVM.playerHeroes, heroes: profileVM.heroes)
         }
+        .onAppear {
+            vm.getMergePlayerHeroes(playerHeroes: profileVM.playerHeroes, heroes: profileVM.heroes)
+        }
     }
 }
 #Preview {

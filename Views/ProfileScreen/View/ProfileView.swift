@@ -3,7 +3,7 @@ import SwiftUI
 struct ProfileView: View {
     @StateObject var vm = ProfileViewModel()
     @State var isTurbo = false
-    @State var selectedTab: selectedTab = .heroes
+    @State var selectedTab: selectedTab = .matches
     let profile: Profile
     var body: some View {
         ScrollView(.vertical) {
