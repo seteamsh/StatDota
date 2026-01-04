@@ -7,7 +7,7 @@ struct PlayerHeroesView: View {
     var profile: Profile
     var body: some View {
         PlayerHeroesDescriptionCard()
-        VStack(spacing: 7) {
+        VStack(spacing: 5) {
             ForEach(vm.mergedPlayerHeroes, id: \.id) { hero in
                 PlayerHeroCard(hero: hero)
             }

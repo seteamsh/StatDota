@@ -3,7 +3,7 @@ import SwiftUI
 struct ProfileView: View {
     @StateObject var vm = ProfileViewModel()
     @State var isTurbo = false
-    @State var selectedTab: selectedTab = .matches
+    @State var selectedTab: SelectedTab = .matches
     let profile: Profile
     var body: some View {
         ScrollView(.vertical) {
@@ -63,11 +63,11 @@ struct ProfileView: View {
                 .padding(.bottom, 30)
                 ScrollView(.horizontal) {
                     HStack(spacing: 20) {
-                        SelectButton(buttonName: "Matches") {
+                        SelectButton(isSelected: selectedTab == .matches, buttonName: "Matches") {
                             selectedTab = .matches
                         }
                         
-                        SelectButton(buttonName: "Heroes") {
+                        SelectButton(isSelected: selectedTab == .heroes , buttonName: "Heroes") {
                             selectedTab = .heroes
                         }
                     }
@@ -100,7 +100,7 @@ struct ProfileView: View {
     ProfileView(profile: Profile(accountId: 1, personaname: "teste1", avatar: "fd", avatarmedium: "fdf", avatarfull: "https://www.dexerto.com/cdn-image/wp-content/uploads/2023/05/26/naruto-itachi-uchiha-mangekyou-sharingan.jpeg", profileurl: "fdf", lastLogin: "fdf"))
 }
 
-enum selectedTab {
+enum SelectedTab {
     case heroes
     case matches
 }

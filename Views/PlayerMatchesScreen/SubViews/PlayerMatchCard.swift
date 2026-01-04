@@ -1,62 +1,36 @@
-//
-//  PlayerMatchCard.swift
-//  StatDota
-//
-//  Created by Temirlan Zhumashov on 21.12.2025.
-//
 import Kingfisher
 import SwiftUI
 
 struct PlayerMatchCard: View {
     var match: PlayerMatchesProcessed
     var body: some View {
-            HStack(spacing: 10) {
-                KFImage(URL(string: "https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/\(match.hero.name.replacingOccurrences(of: "npc_dota_hero_", with: "")).png"))
-                    .resizable()
-                    .frame(width: 88, height: 50)
-//                AsyncImage(
-//                    url: URL(
-//                        string: "https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/\(match.hero.name.replacingOccurrences(of: "npc_dota_hero_", with: "")).png"
-//                    )
-//                ) { imgae in
-//                    imgae
-//                        .resizable()
-//                        .frame(width: 88, height: 50)
-//                    
-//                } placeholder: {
-//                    ZStack {
-//                        Rectangle()
-//                            .foregroundStyle(.background)
-//                            .frame(width: 88, height: 50)
-//                        Image(systemName: "person")
-//                            .font(Font.system(size: 45))
-//                            .foregroundStyle(.gray)
-//                            .opacity(0.3)
-//                        ProgressView()
-//                    }
-//                }
+        HStack(spacing: 10) {
+            HeroAsyncImage(heroName: match.hero.name)
                 .padding(.trailing, -5)
-                VStack(alignment: .leading) {
-                    Text("\(match.hero.localizedName)")
-                    Text("\(match.heroLastPlayed)")
-                }
-                .frame(width: 151, alignment: .leading)
-                Text("\(match.matchResult ?? .win)")
-                    .frame(width: 40, alignment: .leading)
-                    
-                Text("\(match.gameMode)")
-                    .frame(width: 60)
-                VStack(alignment: .leading) {
-                    Text(match.duration)
-                    Text("\(match.playerSide)")
-                }
-                .frame(width: 60, alignment: .leading)
-                Text("\(match.kills)")
-                Text("\(match.deaths)")
-                Text("\(match.assists)")
+            VStack(alignment: .leading) {
+                Text("\(match.hero.localizedName)")
+                Text("\(match.heroLastPlayed)")
             }
-            .frame(maxWidth: .infinity, maxHeight: 50, alignment: .leading)
-            .border(.gray.opacity(0.3), width: 1)
+            .frame(width: 151, alignment: .leading)
+            Text("\(match.matchResult ?? .win)")
+                .frame(width: 40, alignment: .leading)
+            
+            Text("\(match.gameMode)")
+                .frame(width: 60)
+            VStack(alignment: .leading) {
+                Text(match.duration)
+                Text("\(match.playerSide)")
+            }
+            .frame(width: 66, alignment: .leading)
+            Text("\(match.kills)")
+                .frame(width: 45, alignment: .leading)
+            Text("\(match.deaths)")
+                .frame(width: 45, alignment: .leading)
+            Text("\(match.assists)")
+                .frame(width: 45, alignment: .leading)
+        }
+        .frame(maxWidth: .infinity, maxHeight: 50, alignment: .leading)
+        .border(.gray.opacity(0.3), width: 1)
         
     }
 }
@@ -80,14 +54,7 @@ struct PlayerMatchCard: View {
             averageRank: 342,
             leaverStatus: 234,
             partySize: 3432,
-            heroVariant: 234//,
-//            items: [
-//                Item(
-//                    id: 1,
-//                    img: "https://cdn.steamstatic.com/apps/dota2/images/dota_react/items/blink.png?t=1593393829403"
-//                )
-//
-//            ]
+            heroVariant: 234
         )
     )
 }

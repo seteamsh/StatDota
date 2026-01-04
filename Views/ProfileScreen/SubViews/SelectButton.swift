@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SelectButton: View {
-    @State var isSelected: Bool = true
+    var isSelected: Bool
     var buttonName: String
     var action: () -> Void
     var body: some View {
@@ -26,5 +26,5 @@ struct SelectButton: View {
 }
 
 #Preview {
-    SelectButton(buttonName: "Heroes", action: {})
+    SelectButton(isSelected: false, buttonName: "Heroes", action: {})
 }

@@ -7,20 +7,17 @@ struct PlayerMatchesView: View {
     var gameMode: GameMode
     var body: some View {
         ScrollView(.horizontal) {
-            VStack {
-                ForEach(vm.processedMatches, id: \.matchID) { match in
-                    PlayerMatchCard(match: match)
-                }
-                if vm.isLoading {
-                    ProgressView()
+            VStack(spacing: 0) {
+                PlayerMatchesHeader()
+                VStack(spacing: 5) {
+                    ForEach(vm.processedMatches, id: \.matchID) { match in
+                        PlayerMatchCard(match: match)
+                    }
+                    if vm.isLoading {
+                        ProgressView()
+                    }
                 }
             }
-            Button {
-                vm.getPlayerMatches(playerId: profileID, gameMode: gameMode)
-            } label: {
-                Text("download more")
-            }
-
         }
         .onChange(of: vm.matches) {
             vm.processMatches(heroes: profileVM.heroes)
@@ -33,12 +30,11 @@ struct PlayerMatchesView: View {
         .onAppear {
             vm.getPlayerMatches(playerId: profileID, gameMode: gameMode)
         }
-        
-        
-        
-        
-            
-        
+        Button {
+            vm.getPlayerMatches(playerId: profileID, gameMode: gameMode)
+        } label: {
+            Text("download more")
+        }
     }
 }
 
