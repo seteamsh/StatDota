@@ -19,7 +19,6 @@ struct PlayerMatchesHeader: View {
             Text("A")
                 .frame(width: 45, alignment: .leading)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: 50)
         .border(.gray.opacity(0.3), width: 1)
     }

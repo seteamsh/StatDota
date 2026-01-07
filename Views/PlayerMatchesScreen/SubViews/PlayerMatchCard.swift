@@ -29,7 +29,6 @@ struct PlayerMatchCard: View {
             Text("\(match.assists)")
                 .frame(width: 45, alignment: .leading)
         }
-        .frame(maxWidth: .infinity, maxHeight: 50, alignment: .leading)
         .border(.gray.opacity(0.3), width: 1)
         
     }

@@ -9,13 +9,11 @@ struct PlayerMatchesView: View {
         ScrollView(.horizontal) {
             VStack(spacing: 0) {
                 PlayerMatchesHeader()
-                VStack(spacing: 5) {
-                    ForEach(vm.processedMatches, id: \.matchID) { match in
-                        PlayerMatchCard(match: match)
-                    }
-                    if vm.isLoading {
-                        ProgressView()
-                    }
+                ForEach(vm.processedMatches, id: \.matchID) { match in
+                    PlayerMatchCard(match: match)
+                }
+                if vm.isLoading {
+                    ProgressView()
                 }
             }
         }
@@ -27,9 +25,9 @@ struct PlayerMatchesView: View {
             vm.offset = 0
             vm.getPlayerMatches(playerId: profileID, gameMode: gameMode)
         }
-        .onAppear {
-            vm.getPlayerMatches(playerId: profileID, gameMode: gameMode)
-        }
+        //        .onAppear {
+        //            vm.getPlayerMatches(playerId: profileID, gameMode: gameMode)
+        //        }
         Button {
             vm.getPlayerMatches(playerId: profileID, gameMode: gameMode)
         } label: {

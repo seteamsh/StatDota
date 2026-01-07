@@ -79,6 +79,7 @@ struct ProfileView: View {
                     PlayerHeroesView(profileVM: vm, isTurbo: $isTurbo, profile: profile)
                 case .matches:
                     PlayerMatchesView(profileVM: vm, profileID: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
+                        .border(.gray.opacity(0.3), width: 1)
                 }
             }
             
