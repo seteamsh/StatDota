@@ -2,8 +2,9 @@ import SwiftUI
 
 struct ProfileView: View {
     @StateObject var vm = ProfileViewModel()
+    @StateObject var playerMatchesVM = PlayerMatchesViewModel()
     @State var isTurbo = false
-    @State var selectedTab: SelectedTab = .matches
+    @State var selectedPage: Pages = .matches
     let profile: Profile
     var body: some View {
         ScrollView(.vertical) {
@@ -61,31 +62,35 @@ struct ProfileView: View {
                     Spacer()
                 }
                 .padding(.bottom, 30)
-                ScrollView(.horizontal) {
-                    HStack(spacing: 20) {
-                        SelectButton(isSelected: selectedTab == .matches, buttonName: "Matches") {
-                            selectedTab = .matches
-                        }
-                        
-                        SelectButton(isSelected: selectedTab == .heroes , buttonName: "Heroes") {
-                            selectedTab = .heroes
-                        }
+                Picker("", selection: $selectedPage) {
+                    ForEach(Pages.allCases, id: \.self) {
+                        Text($0.rawValue)
                     }
                 }
+                .pickerStyle(.segmented)
                 .padding(.bottom, 20)
                 
-                switch selectedTab {
+                switch selectedPage {
                 case .heroes:
                     PlayerHeroesView(profileVM: vm, isTurbo: $isTurbo, profile: profile)
                 case .matches:
-                    PlayerMatchesView(profileVM: vm, profileID: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
+                    PlayerMatchesView(vm: playerMatchesVM, profileVM: vm, profileID: profile.accountId, isTurbo: $isTurbo)
                         .border(.gray.opacity(0.3), width: 1)
                 }
+                
             }
             
             .onChange(of: isTurbo) {
                 vm.loadWinLose(id: profile.accountId, isTurbo: isTurbo)
                 vm.getPlayerHeroes(id: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
+                playerMatchesVM.matches = []
+                playerMatchesVM.processedMatches = []
+                playerMatchesVM.offset = 0
+                playerMatchesVM.getPlayerMatches(playerId: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
+                    
+            }
+            .onChange(of: playerMatchesVM.matches) {
+                playerMatchesVM.processMatches(heroes: vm.heroes)
             }
             .onAppear {
                 vm.getHeroes()
@@ -101,7 +106,7 @@ struct ProfileView: View {
     ProfileView(profile: Profile(accountId: 1, personaname: "teste1", avatar: "fd", avatarmedium: "fdf", avatarfull: "https://www.dexerto.com/cdn-image/wp-content/uploads/2023/05/26/naruto-itachi-uchiha-mangekyou-sharingan.jpeg", profileurl: "fdf", lastLogin: "fdf"))
 }
 
-enum SelectedTab {
-    case heroes
-    case matches
+enum Pages: String, CaseIterable {
+    case matches = "MATCHES"
+    case heroes = "HEROES"
 }

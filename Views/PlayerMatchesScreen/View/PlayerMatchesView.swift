@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct PlayerMatchesView: View {
-    @StateObject var vm = PlayerMatchesViewModel()
+    @ObservedObject var vm: PlayerMatchesViewModel
     @ObservedObject var profileVM: ProfileViewModel
     let profileID: Int
-    var gameMode: GameMode
+    @Binding var isTurbo: Bool
     var body: some View {
         ScrollView(.horizontal) {
             VStack(spacing: 0) {
@@ -17,19 +17,12 @@ struct PlayerMatchesView: View {
                 }
             }
         }
-        .onChange(of: vm.matches) {
-            vm.processMatches(heroes: profileVM.heroes)
+        
+        .onAppear {
+            vm.getPlayerMatches(playerId: profileID, gameMode: isTurbo ? .turbo : .allPick)
         }
-        .onChange(of: gameMode) {
-            vm.matches = []
-            vm.offset = 0
-            vm.getPlayerMatches(playerId: profileID, gameMode: gameMode)
-        }
-        //        .onAppear {
-        //            vm.getPlayerMatches(playerId: profileID, gameMode: gameMode)
-        //        }
         Button {
-            vm.getPlayerMatches(playerId: profileID, gameMode: gameMode)
+            vm.getPlayerMatches(playerId: profileID, gameMode: isTurbo ? .turbo : .allPick)
         } label: {
             Text("download more")
         }
@@ -38,7 +31,7 @@ struct PlayerMatchesView: View {
 
 #Preview {
     PlayerMatchesView(
-        profileVM: ProfileViewModel(), profileID: 117124649,
-        gameMode: .allPick
+        vm: PlayerMatchesViewModel(), profileVM: ProfileViewModel(), profileID: 117124649,
+        isTurbo: .constant(false)
     )
 }
