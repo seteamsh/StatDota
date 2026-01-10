@@ -17,10 +17,6 @@ struct PlayerMatchesView: View {
                 }
             }
         }
-        
-        .onAppear {
-            vm.getPlayerMatches(playerId: profileID, gameMode: isTurbo ? .turbo : .allPick)
-        }
         Button {
             vm.getPlayerMatches(playerId: profileID, gameMode: isTurbo ? .turbo : .allPick)
         } label: {

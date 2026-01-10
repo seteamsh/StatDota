@@ -7,7 +7,7 @@ class ProfileViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var heroes = [Hero]()
     @Published var playerHeroes = [PlayerHeroes]()
-    
+    @Published var selectedPage: Pages = .matches
     
     private var canLoadMore = true
     func loadWinLose(id: Int, isTurbo: Bool) {
@@ -63,5 +63,9 @@ class ProfileViewModel: ObservableObject {
                 }
             }
         }
+    }
+    enum Pages: String, CaseIterable {
+        case matches = "MATCHES"
+        case heroes = "HEROES"
     }
 }

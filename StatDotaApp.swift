@@ -11,7 +11,7 @@ import SwiftUI
 struct StatDotaApp: App {
     var body: some Scene {
         WindowGroup {
-            SearchPlayerView()
+            MainTabView()
         }
     }
 }
