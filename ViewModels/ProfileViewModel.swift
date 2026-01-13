@@ -37,9 +37,6 @@ class ProfileViewModel: ObservableObject {
         return Double(win) / Double(win + lose) * 100
     }
     
-    
-    
-    
     func getHeroes() {
         NetworkManager.shared.fetchHeroes { result in
             DispatchQueue.main.async {
@@ -52,6 +49,7 @@ class ProfileViewModel: ObservableObject {
             }
         }
     }
+    
     func getPlayerHeroes(id: Int, gameMode: GameMode)  {
         NetworkManager.shared.fetchPlayerHeroes(id: id, gameMode: gameMode) { result in
             DispatchQueue.main.async {

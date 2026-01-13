@@ -124,9 +124,6 @@ class PlayerMatchesViewModel: ObservableObject {
         let hero = heroes.first(where: { $0.id == heroId })!
         return hero
     }
-    deinit {
-        print("PlayerMatchesViewModel deinitialized")
-    }
 }
 
 extension Int {
