@@ -10,6 +10,7 @@ class ProfileViewModel: ObservableObject {
     @Published var selectedPage: Pages = .matches
     
     private var canLoadMore = true
+    
     func loadWinLose(id: Int, isTurbo: Bool) {
         NetworkManager.shared.fetchWinLose(id: id, gameMode: isTurbo ? .turbo : .allPick ) { result in
             switch result {
@@ -24,12 +25,13 @@ class ProfileViewModel: ObservableObject {
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.errorMessage = handleError(error: error)
+                    self.errorMessage = error.localizedDescription
                 }
             }
             
         }
     }
+    
     func getWinRate(win: Int, lose: Int) -> Double {
         guard win + lose > 0 else {
             return 0
@@ -57,11 +59,12 @@ class ProfileViewModel: ObservableObject {
                     case .success(let data):
                         self.playerHeroes = data
                     case .failure(let error):
-                        self.errorMessage = handleError(error: error)
+                    self.errorMessage = error.localizedDescription
                 }
             }
         }
     }
+    
     enum Pages: String, CaseIterable {
         case matches = "MATCHES"
         case heroes = "HEROES"

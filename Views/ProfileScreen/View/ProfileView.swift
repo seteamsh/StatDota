@@ -5,6 +5,7 @@ struct ProfileView: View {
     @StateObject var playerMatchesVM = PlayerMatchesViewModel()
     @State var isTurbo = false
     let profile: Profile
+    
     var body: some View {
         ScrollView(.vertical) {
             VStack(spacing: 0) {

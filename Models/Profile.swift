@@ -1,12 +1,14 @@
 import Foundation
 
-struct Profile: Decodable {
+struct Profile {
     let accountId: Int
     let personaname: String
     let avatar, avatarmedium, avatarfull: String
     let profileurl: String
     let lastLogin: String?
-    
+}
+
+extension Profile: Decodable {
     enum CodingKeys: String, CodingKey {
         case accountId = "account_id"
         case personaname

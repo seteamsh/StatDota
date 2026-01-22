@@ -1,6 +1,6 @@
 import Foundation
 
-struct PlayerMatches: Codable, Equatable {
+struct PlayerMatches {
     let matchID, playerSlot: Int
     let radiantWin: Bool?
     let duration, gameMode, lobbyType, heroID: Int
@@ -10,7 +10,9 @@ struct PlayerMatches: Codable, Equatable {
     let averageRank: Int?
     let leaverStatus: Int
     let partySize, heroVariant: Int?
+}
 
+extension PlayerMatches: Decodable, Equatable {
     enum CodingKeys: String, CodingKey {
         case matchID = "match_id"
         case playerSlot = "player_slot"

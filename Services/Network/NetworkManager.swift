@@ -34,19 +34,33 @@ final class NetworkManager: ObservableObject {
             return completion(.failure(.badURL))
         }
         URLSession.shared.dataTask(with: url) { data, response, error in
-            if error != nil {
-                completion(.failure(.noData))
+            
+            if let error = error as NSError? {
+                if error.code == NSURLErrorNotConnectedToInternet {
+                    return completion(.failure(.offline))
+                } else if error.code == NSURLErrorTimedOut {
+                    return completion(.failure(.timeout))
+                }
+                return completion(.failure(.unknown(error)))
             }
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                return completion(.failure(.badResponse))
+            guard let httpResponse = response as? HTTPURLResponse else {
+                return completion(.failure(.noData))
+            }
+            if httpResponse.statusCode == 404 {
+                completion(.failure(.notFoundedPlayerID))
+            }
+            if !(200...299).contains(httpResponse.statusCode) {
+                return completion(.failure(.badResponse(statusCode: httpResponse.statusCode)))
             }
             guard let safeData = data else {
                 return completion(.failure(.noData))
             }
+            
             do {
                 let decodedData = try JSONDecoder().decode(T.self, from: safeData)
                 completion(.success(decodedData))
             } catch {
+                print("Decoding error: \(error)")
                 completion(.failure(.decodingError))
             }
         }.resume()
@@ -68,6 +82,7 @@ final class NetworkManager: ObservableObject {
             switch self {
             case .profile(let id):
                 components.path = "/api/players/\(id)/"
+                print(components.path)
                 
             case .totalMatches(let id, let gameMode, let path):
                 components.path = "/api/players/\(id)/\(path)"

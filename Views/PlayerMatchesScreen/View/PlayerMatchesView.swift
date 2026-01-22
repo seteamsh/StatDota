@@ -5,18 +5,21 @@ struct PlayerMatchesView: View {
     @ObservedObject var profileVM: ProfileViewModel
     let profileID: Int
     @Binding var isTurbo: Bool
+    
     var body: some View {
         ScrollView(.horizontal) {
             VStack(spacing: 0) {
                 PlayerMatchesHeader()
                 ForEach(vm.processedMatches, id: \.matchID) { match in
                     PlayerMatchCard(match: match)
+                        .id(match.matchID)
                 }
                 if vm.isLoading {
                     ProgressView()
                 }
             }
         }
+        
         Button {
             vm.getPlayerMatches(playerId: profileID, gameMode: isTurbo ? .turbo : .allPick)
         } label: {

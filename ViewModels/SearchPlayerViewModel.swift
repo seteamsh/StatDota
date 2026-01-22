@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
+
 class SearchPlayerViewModel: ObservableObject {
-    
     @Published var player: Profile?
     @Published var errorMessage = ""
     @Published var searchID: String = "117124649"
@@ -13,8 +13,8 @@ class SearchPlayerViewModel: ObservableObject {
                 case .success(let player):
                     self.player = player
                     self.errorMessage = ""
-                case .failure(let networkError):
-                    self.errorMessage = handleError(error: networkError)
+                case .failure(let error):
+                    self.errorMessage = error.localizedDescription
                     self.player = nil
                 }
             }

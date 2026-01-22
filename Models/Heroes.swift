@@ -1,14 +1,15 @@
 import Foundation
 
 // MARK: - Hero
-struct Hero: Decodable, Equatable {
+struct Hero {
     let id: Int
     let name, localizedName: String
     let primaryAttr: PrimaryAttr
     let attackType: AttackType
     let roles: [Role]
     let legs: Int
-
+}
+extension Hero: Decodable, Equatable {
     enum CodingKeys: String, CodingKey {
         case id, name
         case localizedName = "localized_name"

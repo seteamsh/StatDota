@@ -1,10 +1,12 @@
 import Foundation
 
 // MARK: - PlayerHero
-struct PlayerHeroes: Codable, Equatable {
+struct PlayerHeroes {
     let heroID, lastPlayed, games, win: Int
     let withGames, withWin, againstGames, againstWin: Int
+}
 
+extension PlayerHeroes: Decodable, Equatable {
     enum CodingKeys: String, CodingKey {
         case heroID = "hero_id"
         case lastPlayed = "last_played"

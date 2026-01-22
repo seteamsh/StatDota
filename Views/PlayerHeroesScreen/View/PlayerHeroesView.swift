@@ -4,9 +4,12 @@ struct PlayerHeroesView: View {
     @StateObject var vm = PlayerHeroesViewModel()
     @ObservedObject var profileVM: ProfileViewModel
     @Binding var isTurbo: Bool
+    
     var profile: Profile
+    
     var body: some View {
         PlayerHeroesDescriptionCard()
+        
         VStack(spacing: 5) {
             ForEach(vm.mergedPlayerHeroes, id: \.id) { hero in
                 PlayerHeroCard(hero: hero)

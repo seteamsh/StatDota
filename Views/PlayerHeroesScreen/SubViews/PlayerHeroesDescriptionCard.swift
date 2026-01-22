@@ -1,10 +1,3 @@
-//
-//  PlayerHeroesDescriptionCard.swift
-//  StatDota
-//
-//  Created by Temirlan Zhumashov on 14.12.2025.
-//
-
 import SwiftUI
 
 struct PlayerHeroesDescriptionCard: View {
@@ -12,11 +5,15 @@ struct PlayerHeroesDescriptionCard: View {
         HStack(spacing: 0) {
             Text("Hero")
                 .padding(.leading, 5)
+            
             Spacer()
+            
             Text("MP")
                 .frame(width: 50, alignment: .leading)
+            
             Text("Win")
                 .frame(width: 50, alignment: .leading)
+            
             Text("Win%")
                 .frame(width: 45, alignment: .leading)
         }

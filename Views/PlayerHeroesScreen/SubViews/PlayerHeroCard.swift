@@ -3,6 +3,7 @@ import SwiftUI
 
 struct PlayerHeroCard: View {
     var hero: MergedPlayerHeroes
+    
     var body: some View {
         HStack(spacing: 0) {
             HeroAsyncImage(heroName: hero.imageURL)

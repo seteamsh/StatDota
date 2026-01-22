@@ -1,12 +1,8 @@
 import Foundation
 
 class PlayerHeroesViewModel: ObservableObject {
-    
     @Published var errorMessage: String?
-    
-    
     @Published var mergedPlayerHeroes = [MergedPlayerHeroes]()
-    
     
     func getMergePlayerHeroes(playerHeroes: [PlayerHeroes], heroes: [Hero]) {
         mergedPlayerHeroes = playerHeroes.compactMap { playerHero in
