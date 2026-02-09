@@ -9,59 +9,8 @@ struct ProfileView: View {
     var body: some View {
         ScrollView(.vertical) {
             VStack(spacing: 0) {
-                HStack(spacing: 15) {
-                    AsyncImage(url: URL(string: profile.avatarfull)) { image in
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 150, height: 150)
-                            .clipShape(Circle())
-                    } placeholder: {
-                        ZStack {
-                            Rectangle()
-                                .foregroundStyle(.background)
-                                .frame(width: 150, height: 150)
-                                .clipShape(Circle())
-                            ProgressView()
-                        }
-                    }
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text(profile.personaname)
-                            .font(.title)
-                        HStack {
-                            Text("WINS")
-                            if let win = vm.win {
-                                Text("\(win)")
-                            } else {
-                                ProgressView()
-                            }
-                        }
-                        HStack {
-                            Text("LOSE")
-                            if let lose = vm.lose {
-                                Text("\(lose)")
-                            } else {
-                                ProgressView()
-                            }
-                        }
-                        HStack {
-                            Text("WINRATE")
-                            if let winRate = vm.winRate {
-                                Text("\(String(format: "%.2f", winRate))%")
-                            } else {
-                                ProgressView()
-                            }
-                        }
-                        HStack(spacing: 20) {
-                            Text("TURBO")
-                            Toggle("", isOn: $isTurbo)
-                            
-                        }
-                        .labelsHidden()
-                    }
-                    Spacer()
-                }
-                .padding(.bottom, 30)
+                PlayerInfo(profile: profile, isTurbo: $isTurbo)
+                
                 Picker("", selection: $vm.selectedPage) {
                     ForEach(ProfileViewModel.Pages.allCases, id: \.self) {
                         Text($0.rawValue)
