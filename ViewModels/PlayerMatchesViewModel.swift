@@ -121,8 +121,7 @@ class PlayerMatchesViewModel: ObservableObject {
         return String(format: "%02d:%02d", minutes, seconds)
     }
     func getHero(heroId: Int, heroes: [Hero]) -> Hero {
-        let hero = heroes.first(where: { $0.id == heroId })!
-        return hero
+        return heroes.first(where: { $0.id == heroId })!
     }
 }
 
