@@ -21,7 +21,7 @@ struct PlayerMatchesView: View {
         }
         
         Button {
-            vm.getPlayerMatches(playerId: profileID, gameMode: isTurbo ? .turbo : .allPick)
+            vm.loadPlayerMatches(id: profileID, isTurbo: isTurbo)
         } label: {
             Text("download more")
         }

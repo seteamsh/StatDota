@@ -9,7 +9,7 @@ struct ProfileView: View {
     var body: some View {
         ScrollView(.vertical) {
             VStack(spacing: 0) {
-                PlayerInfo(profile: profile, isTurbo: $isTurbo)
+                PlayerInfo(profile: profile, win: vm.win, lose: vm.lose, winRate: vm.winRate, isTurbo: $isTurbo)
                 
                 Picker("", selection: $vm.selectedPage) {
                     ForEach(ProfileViewModel.Pages.allCases, id: \.self) {
@@ -31,21 +31,22 @@ struct ProfileView: View {
             
             .onChange(of: isTurbo) {
                 vm.loadWinLose(id: profile.accountId, isTurbo: isTurbo)
-                vm.getPlayerHeroes(id: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
+                
+                vm.loadPlayerHeroes(id: profile.accountId, isTurbo: isTurbo)
                 playerMatchesVM.matches = []
                 playerMatchesVM.processedMatches = []
                 playerMatchesVM.offset = 0
-                playerMatchesVM.getPlayerMatches(playerId: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
+                playerMatchesVM.loadPlayerMatches(id: profile.accountId, isTurbo: isTurbo)
                     
             }
             .onChange(of: playerMatchesVM.matches) {
                 playerMatchesVM.processMatches(heroes: vm.heroes)
             }
             .onAppear {
-                vm.getHeroes()
+                vm.loadHeroes()
                 vm.loadWinLose(id: profile.accountId, isTurbo: isTurbo)
-                vm.getPlayerHeroes(id: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
-                playerMatchesVM.getPlayerMatches(playerId: profile.accountId, gameMode: isTurbo ? .turbo : .allPick)
+                vm.loadPlayerHeroes(id: profile.accountId, isTurbo: isTurbo)
+                playerMatchesVM.loadPlayerMatches(id: profile.accountId, isTurbo: isTurbo)
             }
             .padding(.horizontal, 5)
         }

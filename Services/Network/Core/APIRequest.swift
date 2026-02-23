@@ -1,0 +1,21 @@
+import Foundation
+
+class APIRequest<Resource: APIResource> {
+    let resource: Resource
+    
+    init(resource: Resource) {
+        self.resource = resource
+    }
+}
+
+extension APIRequest: NetworkRequest {
+    
+    func decode(_ data: Data) -> Resource.ModelType? {
+        let decoded = try? JSONDecoder().decode(Resource.ModelType.self, from: data)
+        return decoded
+    }
+    func execute(withCompletion completion: @escaping (ModelType?) -> Void) {
+        load(resource.url, withCompletion: completion)
+    }
+    
+}

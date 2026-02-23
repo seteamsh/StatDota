@@ -11,13 +11,13 @@ struct SearchPlayerView: View {
                     .font(.title)
                     .foregroundStyle(.searchTextFieldAddFriend)
                 
-                if let player = vm.player {
+                if let profile = vm.profile {
                     NavigationLink {
-                        ProfileView(profile: player)
+                        ProfileView(profile: profile)
                     } label: {
                         HStack {
                             Spacer()
-                            AsyncImage(url: URL(string: player.avatarmedium)) { image in
+                            AsyncImage(url: URL(string: profile.avatarmedium)) { image in
                                 image
                                     .resizable()
                                     .scaledToFill()
@@ -28,7 +28,7 @@ struct SearchPlayerView: View {
                                 ProgressView()
                             }
                             .frame(width: 50, height: 50)
-                            Text(player.personaname)
+                            Text(profile.personaname)
                                 .foregroundStyle(.white)
                                 .font(.title)
                             Spacer()
@@ -55,7 +55,7 @@ struct SearchPlayerView: View {
                 .border(.searchTextFieldBorder, width: 2)
                 HStack(spacing: 0) {
                     Button {
-                        vm.getPlayer(id: Int(vm.searchID) ?? 0)
+                        vm.loadProfile(id: Int(vm.searchID) ?? 0)
                     } label: {
                         SearchButton(text: "Поиск".uppercased())
                     }

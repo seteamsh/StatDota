@@ -1,5 +1,11 @@
 import Foundation
 
+// MARK: - Wrapper
+struct Wrapper: Decodable {
+    let profile: Profile
+}
+
+// MARK: - Profile
 struct Profile {
     let accountId: Int
     let personaname: String
@@ -16,8 +22,4 @@ extension Profile: Decodable {
         case profileurl
         case lastLogin = "last_login"
     }
-}
-
-struct Wrapper: Decodable {
-    let profile: Profile
 }

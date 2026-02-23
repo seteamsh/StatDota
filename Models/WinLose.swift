@@ -1,3 +1,4 @@
+// MARK: - WinLose
 struct WinLose: Decodable {
     let win: Int
     let lose: Int

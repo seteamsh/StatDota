@@ -1,55 +1,32 @@
 import Foundation
+import SwiftUI
 
 class PlayerMatchesViewModel: ObservableObject {
     //MARK: Properties--
     @Published var matches = [PlayerMatches]()
     @Published var items = [Item]()
-    @Published var isLoadMore = false
+    @Published private(set) var isLoading = false
+    @Published private(set) var canLoadMore = true
     @Published var processedMatches = [PlayerMatchesProcessed]()
     
     var offset: Int = 0
     private var limit : Int = 20
-    var isLoading = false
-    var canLoadMore = true
     
-    //MARK: Methods--
     
-//    func getItems() {
-//        NetworkManager.shared.fetchItems { result in
-//            switch result {
-//            case .success(let items):
-//                self.items = items
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-//    }
+    //MARK: Methods-
     
-    func getPlayerMatches(playerId: Int, gameMode: GameMode) {
-        guard !isLoading, canLoadMore else { return }
+    func loadPlayerMatches(id: Int, isTurbo: Bool) {
+        guard !isLoading else { return }
         isLoading = true
-        
-        NetworkManager.shared.fetchPlayerMatches(
-            id: playerId,
-            gameMode: gameMode,
-            offset: matches.count,
-            limit: limit
-            
-        ) { result in
+        let request = APIRequest(resource: PlayerMatchesResource(id: id, isTurbo: isTurbo, offset: offset, limit: limit))
+        request.execute { result in
+            guard let result = result else {
+                return
+            }
             DispatchQueue.main.async {
-                switch result {
-                case .success(let newMatches):
-                    if newMatches.isEmpty {
-                        self.canLoadMore = false
-                    } else {
-                        self.matches.append(contentsOf: newMatches)
-                        self.offset += self.limit
-                    }
-                    self.isLoading = false
-                    print(self.processedMatches.count)
-                case .failure(let error):
-                    print("Error: \(error)")
-                }
+                self.matches += result
+                self.offset += self.limit
+                self.isLoading = false
             }
         }
     }
@@ -85,10 +62,6 @@ class PlayerMatchesViewModel: ObservableObject {
             return .dire
         }
     }
-    
-//    func getItem(itemId: Int) -> Item {
-//        return
-//    }
         
     func getGameResult(radiantWin: Bool?, playerSlot: Int) -> GameResult? {
         let playerSide = getPlayerSide(playerSlot: playerSlot)

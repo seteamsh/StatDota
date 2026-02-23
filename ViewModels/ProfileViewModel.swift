@@ -9,27 +9,37 @@ class ProfileViewModel: ObservableObject {
     @Published var playerHeroes = [PlayerHeroes]()
     @Published var selectedPage: Pages = .matches
     
-    private var canLoadMore = true
-    
     func loadWinLose(id: Int, isTurbo: Bool) {
-        NetworkManager.shared.fetchWinLose(id: id, gameMode: isTurbo ? .turbo : .allPick ) { result in
-            switch result {
-            case .success(let data):
-                DispatchQueue.global(qos: .utility).async {
-                    let rate = self.getWinRate(win: data.win, lose: data.lose)
-                    DispatchQueue.main.async {
-                        self.win = data.win
-                        self.lose = data.lose
-                        self.winRate = rate
-                    }
-                }
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    self.errorMessage = error.localizedDescription
-                }
+        let request = APIRequest(resource: WinLoseResource(id: id, isTurbo: isTurbo))
+        request.execute { result in
+            DispatchQueue.main.async {
+                self.win = result?.win
+                self.lose = result?.lose
+                self.winRate = self.getWinRate(win: result?.win ?? 0, lose: result?.lose ?? 0)
             }
-            
         }
+    }
+    
+    func loadHeroes() {
+        let request = APIRequest(resource: HeroesResource())
+        request.execute { result in
+            DispatchQueue.main.async {
+                self.heroes = result ?? []
+            }
+        }
+    }
+    
+    func loadPlayerHeroes(id: Int, isTurbo: Bool) {
+        let request = APIRequest(resource: PlayerHeroesResource(id: id, isTurbo: isTurbo))
+        request.execute { result in
+            DispatchQueue.main.async {
+                self.playerHeroes = result ?? []
+            }
+        }
+    }
+    
+    func loadPlayerMatches(id: Int, isTurbo: Bool) {
+        
     }
     
     func getWinRate(win: Int, lose: Int) -> Double {
@@ -39,34 +49,28 @@ class ProfileViewModel: ObservableObject {
         return Double(win) / Double(win + lose) * 100
     }
     
-    func getHeroes() {
-        NetworkManager.shared.fetchHeroes { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let heroes):
-                    self.heroes = heroes
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        }
-    }
-    
-    func getPlayerHeroes(id: Int, gameMode: GameMode)  {
-        NetworkManager.shared.fetchPlayerHeroes(id: id, gameMode: gameMode) { result in
-            DispatchQueue.main.async {
-                switch result {
-                    case .success(let data):
-                        self.playerHeroes = data
-                    case .failure(let error):
-                    self.errorMessage = error.localizedDescription
-                }
-            }
-        }
-    }
-    
     enum Pages: String, CaseIterable {
         case matches = "MATCHES"
         case heroes = "HEROES"
     }
+}
+
+class APIRequest<Resource: APIResource> {
+    let resource: Resource
+    
+    init(resource: Resource) {
+        self.resource = resource
+    }
+}
+
+extension APIRequest: NetworkRequest {
+    
+    func decode(_ data: Data) -> Resource.ModelType? {
+        let decoded = try? JSONDecoder().decode(Resource.ModelType.self, from: data)
+        return decoded
+    }
+    func execute(withCompletion completion: @escaping (ModelType?) -> Void) {
+        load(resource.url, withCompletion: completion)
+    }
+    
 }

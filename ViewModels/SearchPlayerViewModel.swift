@@ -2,21 +2,21 @@ import Foundation
 import SwiftUI
 
 class SearchPlayerViewModel: ObservableObject {
-    @Published var player: Profile?
     @Published var errorMessage = ""
     @Published var searchID: String = "117124649"
+    @Published private(set) var profile: Profile?
+    @Published private(set) var isLoading = false
     
-    func getPlayer(id: Int) {
-        NetworkManager.shared.fetchProfile(id: id) { result in
+    func loadProfile(id: Int) {
+        guard !isLoading else {
+            return
+        }
+        isLoading = true
+        let request = APIRequest(resource: ProfileResource(id: id))
+        request.execute { result in
             DispatchQueue.main.async {
-                switch result {
-                case .success(let player):
-                    self.player = player
-                    self.errorMessage = ""
-                case .failure(let error):
-                    self.errorMessage = error.localizedDescription
-                    self.player = nil
-                }
+                self.profile = result?.profile
+                self.isLoading = false
             }
         }
     }
