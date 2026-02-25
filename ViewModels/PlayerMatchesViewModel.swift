@@ -20,13 +20,15 @@ class PlayerMatchesViewModel: ObservableObject {
         isLoading = true
         let request = APIRequest(resource: PlayerMatchesResource(id: id, isTurbo: isTurbo, offset: offset, limit: limit))
         request.execute { result in
-            guard let result = result else {
-                return
-            }
-            DispatchQueue.main.async {
-                self.matches += result
-                self.offset += self.limit
-                self.isLoading = false
+            switch result {
+            case .success(let result):
+                DispatchQueue.main.async {
+                    self.matches += result ?? []
+                    self.offset += self.limit
+                    self.isLoading = false
+                }
+            case .failure(let error):
+                print(error)
             }
         }
     }

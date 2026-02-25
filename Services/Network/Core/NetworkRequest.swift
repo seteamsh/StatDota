@@ -3,20 +3,25 @@ import Foundation
 protocol NetworkRequest: AnyObject {
     associatedtype ModelType
     
-    func decode(_ data: Data) -> ModelType?
-    func execute(withCompletion completion: @escaping (ModelType?) -> Void)
+    func decode(_ data: Data) throws -> ModelType
+    func execute(withCompletion completion: @escaping (Result<ModelType?, NetworkError>) -> Void)
 }
 
 extension NetworkRequest {
-    func load(_ url: URL, withCompletion completion: @escaping (ModelType?) -> Void) {
-        URLSession.shared.dataTask(with: url) { ( data, _, _ ) in
-            guard let data = data, let value = self.decode(data) else {
-                return completion(nil)
+    func load(_ url: URL, withCompletion completion: @escaping (Result<ModelType?, NetworkError>) -> Void) {
+        URLSession.shared.dataTask(with: url) { data, respone, error in
+            if let error = error {
+                return completion(.failure(.unknown(error)))
             }
-            print(url)
-            print(value)
-            
-            completion(value)
+            guard let data = data else {
+                return completion(.failure(NetworkError.noData))
+            }
+            do {
+                let value = try self.decode(data)
+                completion(.success(value))
+            } catch {
+                completion(.failure(NetworkError.decodingError))
+            }
         }.resume()
     }
 }

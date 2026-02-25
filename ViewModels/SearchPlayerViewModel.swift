@@ -14,9 +14,14 @@ class SearchPlayerViewModel: ObservableObject {
         isLoading = true
         let request = APIRequest(resource: ProfileResource(id: id))
         request.execute { result in
-            DispatchQueue.main.async {
-                self.profile = result?.profile
-                self.isLoading = false
+            switch result {
+            case .success(let result):
+                DispatchQueue.main.async {
+                    self.profile = result?.profile
+                    self.isLoading = false
+                }
+            case .failure(let error):
+                print(error)
             }
         }
     }
