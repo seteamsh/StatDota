@@ -2,9 +2,12 @@ import SwiftUI
 
 struct SearchPlayerView: View {
     
-    @StateObject var vm = SearchPlayerViewModel()
+    @ObservedObject var vm = SearchPlayerViewModel()
+    
     var body: some View {
+        
         NavigationStack {
+            
             VStack {
                 Spacer()
                 Text("Добавить в друзья")
@@ -13,7 +16,7 @@ struct SearchPlayerView: View {
                 
                 if let profile = vm.profile {
                     NavigationLink {
-                        ProfileView(profile: profile)
+                        ProfileView(vm: ProfileViewModel(profiile: profile))
                     } label: {
                         HStack {
                             Spacer()
@@ -53,6 +56,7 @@ struct SearchPlayerView: View {
                 .font(.title2)
                 .background(.black)
                 .border(.searchTextFieldBorder, width: 2)
+                
                 HStack(spacing: 0) {
                     Button {
                         vm.loadProfile(id: Int(vm.searchID) ?? 0)
@@ -66,8 +70,8 @@ struct SearchPlayerView: View {
                     } label: {
                         SearchButton(text: "Отмена".uppercased())
                     }
-                    
                 }
+                
                 Spacer()
             }
             .padding(40)

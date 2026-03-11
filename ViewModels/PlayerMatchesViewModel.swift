@@ -1,24 +1,33 @@
 import Foundation
 import SwiftUI
 
-class PlayerMatchesViewModel: ObservableObject {
+final class PlayerMatchesViewModel: ObservableObject {
     //MARK: Properties--
     @Published var matches = [PlayerMatches]()
     @Published var items = [Item]()
     @Published private(set) var isLoading = false
     @Published private(set) var canLoadMore = true
     @Published var processedMatches = [PlayerMatchesProcessed]()
+    @Published var isTurbo: Bool
+    @Published var heroes: [Hero]
+    let profileID: Int
     
     var offset: Int = 0
     private var limit : Int = 20
     
+    init(profileID: Int, isTurbo: Bool, heroes: [Hero]) {
+        self.profileID = profileID
+        self.isTurbo = isTurbo
+        self.heroes = heroes
+        loadPlayerMatches()
+    }
     
     //MARK: Methods-
     
-    func loadPlayerMatches(id: Int, isTurbo: Bool) {
+    func loadPlayerMatches() {
         guard !isLoading else { return }
         isLoading = true
-        let request = APIRequest(resource: PlayerMatchesResource(id: id, isTurbo: isTurbo, offset: offset, limit: limit))
+        let request = APIRequest(resource: PlayerMatchesResource(id: profileID, isTurbo: isTurbo, offset: offset, limit: limit))
         request.execute { result in
             switch result {
             case .success(let result):

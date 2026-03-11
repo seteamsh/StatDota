@@ -1,36 +1,47 @@
 import SwiftUI
 
 struct PlayerMatchesView: View {
+    
     @ObservedObject var vm: PlayerMatchesViewModel
-    @ObservedObject var profileVM: ProfileViewModel
-    let profileID: Int
-    @Binding var isTurbo: Bool
     
     var body: some View {
-        ScrollView(.horizontal) {
-            VStack(spacing: 0) {
-                PlayerMatchesHeader()
-                ForEach(vm.processedMatches, id: \.matchID) { match in
-                    PlayerMatchCard(match: match)
-                        .id(match.matchID)
+        VStack {
+            ScrollView(.horizontal) {
+                VStack(spacing: 0) {
+                    PlayerMatchesHeader()
+                    ForEach(vm.processedMatches, id: \.matchID) { match in
+                        PlayerMatchCard(match: match)
+                            .id(match.matchID)
+                    }
+                    if vm.isLoading {
+                        ProgressView()
+                    }
                 }
-                if vm.isLoading {
-                    ProgressView()
-                }
+            }
+            
+            Button {
+                vm.loadPlayerMatches()
+            } label: {
+                Text("download more")
             }
         }
         
-        Button {
-            vm.loadPlayerMatches(id: profileID, isTurbo: isTurbo)
-        } label: {
-            Text("download more")
+        .onChange(of: vm.matches) {
+            vm.processMatches(heroes: vm.heroes)
         }
+        
+        .onChange(of: vm.isTurbo) {
+            vm.matches = []
+            vm.processedMatches = []
+            vm.offset = 0
+            vm.loadPlayerMatches()
+        }
+        
     }
 }
 
 #Preview {
     PlayerMatchesView(
-        vm: PlayerMatchesViewModel(), profileVM: ProfileViewModel(), profileID: 117124649,
-        isTurbo: .constant(false)
+        vm: PlayerMatchesViewModel(profileID: 117124649, isTurbo: false, heroes: [Hero]())
     )
 }

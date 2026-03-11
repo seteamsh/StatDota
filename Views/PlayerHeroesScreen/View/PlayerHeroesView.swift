@@ -1,11 +1,7 @@
 import SwiftUI
 
 struct PlayerHeroesView: View {
-    @StateObject var vm = PlayerHeroesViewModel()
-    @ObservedObject var profileVM: ProfileViewModel
-    @Binding var isTurbo: Bool
-    
-    var profile: Profile
+    @StateObject var vm: PlayerHeroesViewModel
     
     var body: some View {
         PlayerHeroesDescriptionCard()
@@ -15,14 +11,29 @@ struct PlayerHeroesView: View {
                 PlayerHeroCard(hero: hero)
             }
         }
-        .onChange(of: profileVM.playerHeroes) {
-            vm.getMergePlayerHeroes(playerHeroes: profileVM.playerHeroes, heroes: profileVM.heroes)
+        .onChange(of: vm.playerHeroes) {
+            vm.getMergePlayerHeroes(playerHeroes: vm.playerHeroes, heroes: vm.heroes)
         }
         .onAppear {
-            vm.getMergePlayerHeroes(playerHeroes: profileVM.playerHeroes, heroes: profileVM.heroes)
+            vm.getMergePlayerHeroes(playerHeroes: vm.playerHeroes, heroes: vm.heroes)
         }
     }
 }
 #Preview {
-    PlayerHeroesView(profileVM: ProfileViewModel(), isTurbo: .constant(false), profile: Profile(accountId: 1, personaname: "test", avatar: "fdff", avatarmedium: "fdfdf", avatarfull: "dfdfdf", profileurl: "dfdf", lastLogin: "FDf"))
+    PlayerHeroesView(
+        vm: PlayerHeroesViewModel(
+            playerHeroes: [PlayerHeroes(
+                heroID: 1,
+                lastPlayed: 1,
+                games: 1,
+                win: 1,
+                withGames: 1,
+                withWin: 1,
+                againstGames: 1,
+                againstWin: 1
+            )],
+            heroes: [Hero](),
+            isTurbo: false
+        )
+    )
 }

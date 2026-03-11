@@ -1,6 +1,7 @@
 import SwiftUI
 
 class ProfileViewModel: ObservableObject {
+    @Published var isTurbo = false
     @Published var win: Int?
     @Published var lose: Int?
     @Published var winRate: Double?
@@ -8,7 +9,11 @@ class ProfileViewModel: ObservableObject {
     @Published var heroes = [Hero]()
     @Published var playerHeroes = [PlayerHeroes]()
     @Published var selectedPage: Pages = .matches
+    let profile: Profile
     
+    init(profiile: Profile) {
+        self.profile = profiile
+    }
     func loadWinLose(id: Int, isTurbo: Bool) {
         let request = APIRequest(resource: WinLoseResource(id: id, isTurbo: isTurbo))
         request.execute { result in

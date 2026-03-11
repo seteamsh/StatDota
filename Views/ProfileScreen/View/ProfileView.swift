@@ -1,15 +1,13 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @StateObject var vm = ProfileViewModel()
-    @StateObject var playerMatchesVM = PlayerMatchesViewModel()
-    @State var isTurbo = false
-    let profile: Profile
+    
+    @StateObject var vm: ProfileViewModel
     
     var body: some View {
         ScrollView(.vertical) {
             VStack(spacing: 0) {
-                PlayerInfo(profile: profile, win: vm.win, lose: vm.lose, winRate: vm.winRate, isTurbo: $isTurbo)
+                PlayerInfo(profile: vm.profile, win: vm.win, lose: vm.lose, winRate: vm.winRate, isTurbo: $vm.isTurbo)
                 
                 Picker("", selection: $vm.selectedPage) {
                     ForEach(ProfileViewModel.Pages.allCases, id: \.self) {
@@ -21,32 +19,27 @@ struct ProfileView: View {
                 
                 switch vm.selectedPage {
                 case .heroes:
-                    PlayerHeroesView(profileVM: vm, isTurbo: $isTurbo, profile: profile)
+                    PlayerHeroesView(vm: PlayerHeroesViewModel(playerHeroes: vm.playerHeroes, heroes: vm.heroes, isTurbo: vm.isTurbo))
                 case .matches:
-                    PlayerMatchesView(vm: playerMatchesVM, profileVM: vm, profileID: profile.accountId, isTurbo: $isTurbo)
+                    PlayerMatchesView(vm: PlayerMatchesViewModel(profileID: vm.profile.accountId, isTurbo: vm.isTurbo, heroes: vm.heroes))
                         .border(.gray.opacity(0.3), width: 1)
                 }
                 
             }
             
-            .onChange(of: isTurbo) {
-                vm.loadWinLose(id: profile.accountId, isTurbo: isTurbo)
+            .onChange(of: vm.isTurbo) {
+                vm.loadWinLose(id: vm.profile.accountId, isTurbo: vm.isTurbo)
                 
-                vm.loadPlayerHeroes(id: profile.accountId, isTurbo: isTurbo)
-                playerMatchesVM.matches = []
-                playerMatchesVM.processedMatches = []
-                playerMatchesVM.offset = 0
-                playerMatchesVM.loadPlayerMatches(id: profile.accountId, isTurbo: isTurbo)
-                    
+                vm.loadPlayerHeroes(id: vm.profile.accountId, isTurbo: vm.isTurbo)
+                
+                
             }
-            .onChange(of: playerMatchesVM.matches) {
-                playerMatchesVM.processMatches(heroes: vm.heroes)
-            }
+
             .onAppear {
                 vm.loadHeroes()
-                vm.loadWinLose(id: profile.accountId, isTurbo: isTurbo)
-                vm.loadPlayerHeroes(id: profile.accountId, isTurbo: isTurbo)
-                playerMatchesVM.loadPlayerMatches(id: profile.accountId, isTurbo: isTurbo)
+                vm.loadWinLose(id: vm.profile.accountId, isTurbo: vm.isTurbo)
+                vm.loadPlayerHeroes(id: vm.profile.accountId, isTurbo: vm.isTurbo)
+                
             }
             .padding(.horizontal, 5)
         }
@@ -54,5 +47,16 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(profile: Profile(accountId: 1, personaname: "teste1", avatar: "fd", avatarmedium: "fdf", avatarfull: "https://www.dexerto.com/cdn-image/wp-content/uploads/2023/05/26/naruto-itachi-uchiha-mangekyou-sharingan.jpeg", profileurl: "fdf", lastLogin: "fdf"))
+    ProfileView(
+        vm: ProfileViewModel(profiile: Profile(
+            accountId: 1,
+            personaname: "teste1",
+            avatar: "fd",
+            avatarmedium: "fdf",
+            avatarfull: "https://www.dexerto.com/cdn-image/wp-content/uploads/2023/05/26/naruto-itachi-uchiha-mangekyou-sharingan.jpeg",
+            profileurl: "fdf",
+            lastLogin: "fdf"
+            )
+        )
+    )
 }
