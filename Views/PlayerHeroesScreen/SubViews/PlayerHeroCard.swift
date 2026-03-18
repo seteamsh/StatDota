@@ -2,23 +2,22 @@ import Kingfisher
 import SwiftUI
 
 struct PlayerHeroCard: View {
-    var hero: MergedPlayerHeroes
-    
+    var vm: PlayerHeroCardViewModel
     var body: some View {
         HStack(spacing: 0) {
-            HeroAsyncImage(heroName: hero.imageURL)
+            HeroAsyncImage(heroName: vm.hero.imageURL)
                 .padding(.trailing, 5)
             VStack(alignment: .leading, spacing: 5) {
-                Text("\(hero.name)")
+                Text("\(vm.hero.name)")
                     .font(.system(size: 16))
-                Text("\(hero.lastPlayed.timeAgo())")
+                Text("\(vm.hero.lastPlayed.timeAgo())")
             }
             Spacer()
-            Text("\(hero.games)")
+            Text("\(vm.hero.games)")
                 .frame(width: 50, alignment: .leading)
-            Text("\(hero.win)")
+            Text("\(vm.hero.win)")
                 .frame(width: 50, alignment: .leading)
-            Text("\(String(format: "%.1f", hero.winRate))")
+            Text("\(String(format: "%.1f", vm.hero.winRate))")
                 .frame(width: 45, alignment: .leading)
         }
         
@@ -28,5 +27,17 @@ struct PlayerHeroCard: View {
 }
 
 #Preview {
-    PlayerHeroCard(hero: MergedPlayerHeroes(id: 1, name: "Invoker", imageURL: "invoker", win: 6800, games: 3000, lastPlayed: 34234, winRate: 100))
+    PlayerHeroCard(
+        vm: PlayerHeroCardViewModel(
+            hero: MergedPlayerHeroes(
+                id: 1,
+                name: "Invoker",
+                imageURL: "invoker",
+                win: 6800,
+                games: 3000,
+                lastPlayed: 34234,
+                winRate: 100
+            )
+        )
+    )
 }

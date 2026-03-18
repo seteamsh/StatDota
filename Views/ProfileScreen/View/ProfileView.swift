@@ -2,15 +2,17 @@ import SwiftUI
 
 struct ProfileView: View {
     
-    @StateObject var vm: ProfileViewModel
+    @ObservedObject var vm: ProfileViewModel
     
     var body: some View {
         ScrollView(.vertical) {
             VStack(spacing: 0) {
-                PlayerInfo(profile: vm.profile, win: vm.win, lose: vm.lose, winRate: vm.winRate, isTurbo: $vm.isTurbo)
-                
+                PlayerInfo(vm: PlayerInfoViewModel(winLose: vm.winLose, winLoseTurbo: vm.winLoseTurbo, winRate: vm.winRate, winRateTurbo: vm.winRateTurbo, profile: vm.profile), isTurbo: $vm.isTurbo)
+                    .onChange(of: vm.isTurbo) {
+                        vm.loadWinLose()
+                    }
                 Picker("", selection: $vm.selectedPage) {
-                    ForEach(ProfileViewModel.Pages.allCases, id: \.self) {
+                    ForEach(vm.pages, id: \.self) {
                         Text($0.rawValue)
                     }
                 }
@@ -19,29 +21,33 @@ struct ProfileView: View {
                 
                 switch vm.selectedPage {
                 case .heroes:
-                    PlayerHeroesView(vm: PlayerHeroesViewModel(playerHeroes: vm.playerHeroes, heroes: vm.heroes, isTurbo: vm.isTurbo))
+                    switch vm.isTurbo {
+                    case true:
+                        PlayerHeroesView(vm: PlayerHeroesViewModel(playerHeroes: vm.mergedPlayerHeroesTurbo))
+                    case false:
+                        PlayerHeroesView(vm: PlayerHeroesViewModel(playerHeroes: vm.mergedPlayerHeroes))
+                    }
                 case .matches:
                     PlayerMatchesView(vm: PlayerMatchesViewModel(profileID: vm.profile.accountId, isTurbo: vm.isTurbo, heroes: vm.heroes))
                         .border(.gray.opacity(0.3), width: 1)
-                }
-                
-            }
-            
-            .onChange(of: vm.isTurbo) {
-                vm.loadWinLose(id: vm.profile.accountId, isTurbo: vm.isTurbo)
-                
-                vm.loadPlayerHeroes(id: vm.profile.accountId, isTurbo: vm.isTurbo)
-                
-                
-            }
 
-            .onAppear {
-                vm.loadHeroes()
-                vm.loadWinLose(id: vm.profile.accountId, isTurbo: vm.isTurbo)
-                vm.loadPlayerHeroes(id: vm.profile.accountId, isTurbo: vm.isTurbo)
+                }
+                    
                 
             }
             .padding(.horizontal, 5)
+            .onAppear {
+                vm.loadPlayerHeroes(id: vm.profile.accountId, isTurbo: vm.isTurbo)
+            }
+            .onChange(of: vm.isTurbo) {
+                vm.loadPlayerHeroes(id: vm.profile.accountId, isTurbo: vm.isTurbo)
+            }
+            .onChange(of: vm.playerHeroes) {
+                vm.getMergePlayerHeroes()
+            }
+            .onChange(of: vm.playerHeroesTurbo) {
+                vm.getMergePlayerHeroes()
+            }
         }
     }
 }

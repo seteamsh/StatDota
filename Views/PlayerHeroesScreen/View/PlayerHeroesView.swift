@@ -1,39 +1,31 @@
 import SwiftUI
 
 struct PlayerHeroesView: View {
-    @StateObject var vm: PlayerHeroesViewModel
+    
+    var vm: PlayerHeroesViewModel
     
     var body: some View {
         PlayerHeroesDescriptionCard()
         
         VStack(spacing: 5) {
-            ForEach(vm.mergedPlayerHeroes, id: \.id) { hero in
-                PlayerHeroCard(hero: hero)
+            ForEach(vm.playerHeroes, id: \.id) { hero in
+                PlayerHeroCard(vm: PlayerHeroCardViewModel(hero: hero))
             }
-        }
-        .onChange(of: vm.playerHeroes) {
-            vm.getMergePlayerHeroes(playerHeroes: vm.playerHeroes, heroes: vm.heroes)
-        }
-        .onAppear {
-            vm.getMergePlayerHeroes(playerHeroes: vm.playerHeroes, heroes: vm.heroes)
         }
     }
 }
 #Preview {
     PlayerHeroesView(
         vm: PlayerHeroesViewModel(
-            playerHeroes: [PlayerHeroes(
-                heroID: 1,
-                lastPlayed: 1,
-                games: 1,
+            playerHeroes: [MergedPlayerHeroes(
+                id: 1,
+                name: "343",
+                imageURL: "fd",
                 win: 1,
-                withGames: 1,
-                withWin: 1,
-                againstGames: 1,
-                againstWin: 1
-            )],
-            heroes: [Hero](),
-            isTurbo: false
+                games: 1,
+                lastPlayed: 1,
+                winRate: 1.1
+            )]
         )
     )
 }

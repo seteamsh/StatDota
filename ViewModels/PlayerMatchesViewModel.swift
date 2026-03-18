@@ -2,14 +2,17 @@ import Foundation
 import SwiftUI
 
 final class PlayerMatchesViewModel: ObservableObject {
+    
     //MARK: Properties--
     @Published var matches = [PlayerMatches]()
     @Published var items = [Item]()
     @Published private(set) var isLoading = false
     @Published private(set) var canLoadMore = true
+    
     @Published var processedMatches = [PlayerMatchesProcessed]()
     @Published var isTurbo: Bool
     @Published var heroes: [Hero]
+    
     let profileID: Int
     
     var offset: Int = 0
@@ -42,7 +45,7 @@ final class PlayerMatchesViewModel: ObservableObject {
         }
     }
     
-    func processMatches(heroes: [Hero]) {
+    func processMatches() {
         processedMatches = matches.map { match in
             return PlayerMatchesProcessed(
                 matchID: match.matchID,

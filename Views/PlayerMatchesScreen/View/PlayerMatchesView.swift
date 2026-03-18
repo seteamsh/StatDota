@@ -11,7 +11,6 @@ struct PlayerMatchesView: View {
                     PlayerMatchesHeader()
                     ForEach(vm.processedMatches, id: \.matchID) { match in
                         PlayerMatchCard(match: match)
-                            .id(match.matchID)
                     }
                     if vm.isLoading {
                         ProgressView()
@@ -25,9 +24,8 @@ struct PlayerMatchesView: View {
                 Text("download more")
             }
         }
-        
         .onChange(of: vm.matches) {
-            vm.processMatches(heroes: vm.heroes)
+            vm.processMatches()
         }
         
         .onChange(of: vm.isTurbo) {
@@ -36,7 +34,6 @@ struct PlayerMatchesView: View {
             vm.offset = 0
             vm.loadPlayerMatches()
         }
-        
     }
 }
 

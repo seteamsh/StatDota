@@ -4,8 +4,9 @@ import SwiftUI
 class SearchPlayerViewModel: ObservableObject {
     @Published var errorMessage = ""
     @Published var searchID: String = "117124649"
-    @Published private(set) var profile: Profile?
     @Published private(set) var isLoading = false
+    
+    var profile: Profile?
     
     func loadProfile(id: Int) {
         guard !isLoading else {

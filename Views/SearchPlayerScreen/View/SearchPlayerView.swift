@@ -2,7 +2,7 @@ import SwiftUI
 
 struct SearchPlayerView: View {
     
-    @ObservedObject var vm = SearchPlayerViewModel()
+    @StateObject var vm = SearchPlayerViewModel()
     
     var body: some View {
         
