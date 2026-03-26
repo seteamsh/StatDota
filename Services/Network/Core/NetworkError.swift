@@ -1,3 +1,5 @@
+import Foundation
+
 enum NetworkError: Error {
     case badURL
     case noData
@@ -25,6 +27,26 @@ enum NetworkError: Error {
             return "Неизвестная ошибка: \(error.localizedDescription)"
         case .notFoundedPlayerID:
             return "Игрок с такими ID не найден"
+        }
+    }
+}
+
+enum AuthenticationErrors: Error, LocalizedError {
+    case emptyField
+    case playerIdTooShort
+    case playerIdTooLong
+    case invalidIdFormat
+    
+    var errorDescription: String? {
+        switch self {
+        case .emptyField:
+            return "Поле не может быть пустым"
+        case .playerIdTooShort:
+            return "ID игрока должно быть не менее 6 символов"
+        case .playerIdTooLong:
+            return "ID игрока должно быть не более 12 символов"
+        case .invalidIdFormat:
+            return "ID игрока должен состоять только из цифр"
         }
     }
 }

@@ -4,6 +4,7 @@ struct PlayerHeroesView: View {
     
     var vm: PlayerHeroesViewModel
     
+    
     var body: some View {
         PlayerHeroesDescriptionCard()
         

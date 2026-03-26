@@ -1,33 +1,58 @@
 import Foundation
 import SwiftUI
 
-class SearchPlayerViewModel: ObservableObject {
-    @Published var errorMessage = ""
-    @Published var searchID: String = "117124649"
+final class SearchPlayerViewModel: ObservableObject {
+    @Published var errorMessage: String?
+    @Published var tempSearchID = String()
+    private var searchID = Int()
+    
     @Published private(set) var isLoading = false
+    @Published private(set) var profile: Profile?
     
-    var profile: Profile?
-    
-    func loadProfile(id: Int) {
-        guard !isLoading else {
-            return
+    func setSearchID() throws {
+        guard let intValue = Int(tempSearchID) else {
+            throw AuthenticationErrors.invalidIdFormat
         }
+        
+        guard !tempSearchID.isEmpty else {
+            throw AuthenticationErrors.emptyField
+        }
+        
+        guard !(tempSearchID.count < 6) else {
+            throw AuthenticationErrors.playerIdTooShort
+        }
+        
+        guard !(tempSearchID.count > 12) else {
+            throw AuthenticationErrors.playerIdTooLong
+        }
+        
+        searchID = intValue
+    }
+    
+    func loadProfile() {
         isLoading = true
-        let request = APIRequest(resource: ProfileResource(id: id))
+        defer {
+            isLoading = false
+        }
+        let request = APIRequest(resource: ProfileResource(id: searchID))
         request.execute { result in
             switch result {
             case .success(let result):
                 DispatchQueue.main.async {
                     self.profile = result?.profile
-                    self.isLoading = false
                 }
             case .failure(let error):
                 print(error)
             }
         }
     }
-
-    deinit {
-        print("SearchPlayerViewModel deinited")
+    
+    func searchPlayer() {
+        do {
+            try setSearchID()
+            loadProfile()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
     }
 }

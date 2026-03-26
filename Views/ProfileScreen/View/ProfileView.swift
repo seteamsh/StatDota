@@ -28,9 +28,19 @@ struct ProfileView: View {
                         PlayerHeroesView(vm: PlayerHeroesViewModel(playerHeroes: vm.mergedPlayerHeroes))
                     }
                 case .matches:
-                    PlayerMatchesView(vm: PlayerMatchesViewModel(profileID: vm.profile.accountId, isTurbo: vm.isTurbo, heroes: vm.heroes))
-                        .border(.gray.opacity(0.3), width: 1)
-
+                    switch vm.isTurbo {
+                    case true:
+                        PlayerMatchesView(vm: PlayerMatchesViewModel(matches: vm.processedMatchesTurbo) {
+                            vm.loadPlayerMatches()
+                            vm.offsetTurbo = 20
+                        })
+                    case false:
+                        PlayerMatchesView(vm: PlayerMatchesViewModel(matches: vm.processedMatches) {
+                            vm.loadPlayerMatches()
+                            vm.offset = 20
+                        })
+                    }
+                        //.border(.gray.opacity(0.3), width: 1)
                 }
                     
                 
@@ -38,15 +48,23 @@ struct ProfileView: View {
             .padding(.horizontal, 5)
             .onAppear {
                 vm.loadPlayerHeroes(id: vm.profile.accountId, isTurbo: vm.isTurbo)
+                vm.loadPlayerMatches()
             }
             .onChange(of: vm.isTurbo) {
                 vm.loadPlayerHeroes(id: vm.profile.accountId, isTurbo: vm.isTurbo)
+                vm.loadPlayerMatches()
             }
             .onChange(of: vm.playerHeroes) {
                 vm.getMergePlayerHeroes()
             }
             .onChange(of: vm.playerHeroesTurbo) {
                 vm.getMergePlayerHeroes()
+            }
+            .onChange(of: vm.matchesTurbo) {
+                vm.getProcessMatches()
+            }
+            .onChange(of: vm.matches) {
+                vm.getProcessMatches()
             }
         }
     }

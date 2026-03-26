@@ -2,7 +2,7 @@ import SwiftUI
 
 struct SearchPlayerView: View {
     
-    @StateObject var vm = SearchPlayerViewModel()
+    @StateObject private var vm = SearchPlayerViewModel()
     
     var body: some View {
         
@@ -39,12 +39,11 @@ struct SearchPlayerView: View {
                     }
                     
                 } else {
-                    Text(vm.errorMessage)
+                    Text(vm.errorMessage ?? "")
                         .foregroundStyle(.white)
                 }
                 
-                
-                TextField(text: $vm.searchID) {
+                TextField(text: $vm.tempSearchID) {
                     Text("Поиск по ID")
                         .foregroundStyle(.searchPlacehoderForegroundStyle)
                     
@@ -59,14 +58,14 @@ struct SearchPlayerView: View {
                 
                 HStack(spacing: 0) {
                     Button {
-                        vm.loadProfile(id: Int(vm.searchID) ?? 0)
+                        vm.searchPlayer()
                     } label: {
                         SearchButton(text: "Поиск".uppercased())
                     }
                     
                     Spacer()
                     Button {
-                        vm.searchID = ""
+                        
                     } label: {
                         SearchButton(text: "Отмена".uppercased())
                     }
