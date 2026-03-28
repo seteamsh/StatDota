@@ -14,47 +14,9 @@ struct SearchPlayerView: View {
                     .font(.title)
                     .foregroundStyle(.searchTextFieldAddFriend)
                 
-                if let profile = vm.profile {
-                    NavigationLink {
-                        ProfileView(vm: ProfileViewModel(profiile: profile))
-                    } label: {
-                        HStack {
-                            Spacer()
-                            AsyncImage(url: URL(string: profile.avatarmedium)) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 60, height: 60)
-                                    .clipped()
-                                    .clipShape(.circle)
-                            } placeholder: {
-                                ProgressView()
-                            }
-                            .frame(width: 50, height: 50)
-                            Text(profile.personaname)
-                                .foregroundStyle(.white)
-                                .font(.title)
-                            Spacer()
-                        }
-                    }
-                    
-                } else {
-                    Text(vm.errorMessage ?? "")
-                        .foregroundStyle(.white)
-                }
+                ProfileField(profile: vm.profile, errorMessage: vm.errorMessage)
                 
-                TextField(text: $vm.tempSearchID) {
-                    Text("Поиск по ID")
-                        .foregroundStyle(.searchPlacehoderForegroundStyle)
-                    
-                }
-                .frame(height: 60)
-                .keyboardType(.numberPad)
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.white)
-                .font(.title2)
-                .background(.black)
-                .border(.searchTextFieldBorder, width: 2)
+                SearchPlayerIDField(id: $vm.tempSearchID)
                 
                 HStack(spacing: 0) {
                     Button {
