@@ -20,7 +20,7 @@ extension NetworkRequest {
                 let value = try self.decode(data)
                 completion(.success(value))
             } catch {
-                completion(.failure(NetworkError.decodingError))
+                completion(.failure(NetworkError.notFoundPlayerID))
             }
         }.resume()
     }

@@ -9,20 +9,22 @@ final class SearchPlayerViewModel: ObservableObject {
     @Published private(set) var isLoading = false
     @Published private(set) var profile: Profile?
     
+    
     func setSearchID() throws {
-        guard let intValue = Int(tempSearchID) else {
-            throw AuthenticationErrors.invalidIdFormat
-        }
         
         guard !tempSearchID.isEmpty else {
             throw AuthenticationErrors.emptyField
         }
         
-        guard !(tempSearchID.count < 6) else {
+        guard let intValue = Int(tempSearchID) else {
+            throw AuthenticationErrors.invalidIdFormat
+        }
+        
+        guard !(tempSearchID.count < 7) else {
             throw AuthenticationErrors.playerIdTooShort
         }
         
-        guard !(tempSearchID.count > 12) else {
+        guard !(tempSearchID.count > 11) else {
             throw AuthenticationErrors.playerIdTooLong
         }
         
@@ -42,17 +44,48 @@ final class SearchPlayerViewModel: ObservableObject {
                     self.profile = result?.profile
                 }
             case .failure(let error):
-                print(error)
+                DispatchQueue.main.async {
+                    self.errorMessage = error.errorDescription
+                }
             }
         }
     }
     
     func searchPlayer() {
+        defer {
+            profile = nil
+            errorMessage = nil
+        }
         do {
             try setSearchID()
             loadProfile()
         } catch {
             errorMessage = error.localizedDescription
+        }
+    }
+    enum AuthenticationErrors: Error, LocalizedError {
+        var minPlayerIDLength: Int {
+            7
+        }
+        var maxPlayerIDLength: Int {
+            11
+        }
+        case emptyField
+        case playerIdTooShort
+        case playerIdTooLong
+        case invalidIdFormat
+        
+        var errorDescription: String? {
+            switch self {
+            case .emptyField:
+                return "Поле не может быть пустым"
+            case .playerIdTooShort:
+                return "ID игрока должно быть не менее \(minPlayerIDLength) символов"
+            case .playerIdTooLong:
+                return "ID игрока должно быть не более \(maxPlayerIDLength) символов"
+            case .invalidIdFormat:
+                return "ID игрока должен состоять только из цифр"
+            }
         }
     }
 }

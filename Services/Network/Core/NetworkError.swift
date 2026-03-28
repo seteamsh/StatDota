@@ -1,6 +1,6 @@
 import Foundation
 
-enum NetworkError: Error {
+enum NetworkError: Error, LocalizedError {
     case badURL
     case noData
     case badResponse(statusCode: Int)
@@ -8,7 +8,7 @@ enum NetworkError: Error {
     case offline
     case timeout
     case unknown(Error)
-    case notFoundedPlayerID
+    case notFoundPlayerID
     var errorDescription: String? {
         switch self {
         case .badURL:
@@ -25,28 +25,10 @@ enum NetworkError: Error {
             return "Время ожидания истекло, попробуйте снова"
         case .unknown(let error):
             return "Неизвестная ошибка: \(error.localizedDescription)"
-        case .notFoundedPlayerID:
+        case .notFoundPlayerID:
             return "Игрок с такими ID не найден"
         }
     }
 }
 
-enum AuthenticationErrors: Error, LocalizedError {
-    case emptyField
-    case playerIdTooShort
-    case playerIdTooLong
-    case invalidIdFormat
-    
-    var errorDescription: String? {
-        switch self {
-        case .emptyField:
-            return "Поле не может быть пустым"
-        case .playerIdTooShort:
-            return "ID игрока должно быть не менее 6 символов"
-        case .playerIdTooLong:
-            return "ID игрока должно быть не более 12 символов"
-        case .invalidIdFormat:
-            return "ID игрока должен состоять только из цифр"
-        }
-    }
-}
+

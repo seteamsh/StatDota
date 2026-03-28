@@ -33,7 +33,7 @@ class ProfileViewModel: ObservableObject {
     private var limit = 20
     
     var pages: [Pages] = [.matches, .heroes]
-    let profile: Profile
+    var profile: Profile
     
     init(profiile: Profile) {
         self.profile = profiile

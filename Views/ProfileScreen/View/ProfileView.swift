@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ProfileView: View {
     
-    @ObservedObject var vm: ProfileViewModel
+    @StateObject var vm: ProfileViewModel
     
     var body: some View {
         ScrollView(.vertical) {
@@ -49,6 +49,7 @@ struct ProfileView: View {
             .onAppear {
                 vm.loadPlayerHeroes(id: vm.profile.accountId, isTurbo: vm.isTurbo)
                 vm.loadPlayerMatches()
+                
             }
             .onChange(of: vm.isTurbo) {
                 vm.loadPlayerHeroes(id: vm.profile.accountId, isTurbo: vm.isTurbo)
