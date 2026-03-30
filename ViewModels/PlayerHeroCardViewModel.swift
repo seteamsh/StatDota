@@ -1,3 +1,3 @@
-struct PlayerHeroCardViewModel {
-    let hero: MergedPlayerHeroes
+struct PlayerHedroCardViewModel {
+    
 }

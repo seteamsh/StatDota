@@ -2,13 +2,13 @@ import Foundation
 import SwiftUI
 
 final class SearchPlayerViewModel: ObservableObject {
-    @Published var errorMessage: String?
-    @Published var tempSearchID = String()
-    private var searchID = Int()
-    
     @Published private(set) var isLoading = false
     @Published private(set) var profile: Profile?
     
+    @Published var errorMessage: String?
+    @Published var tempSearchID = String()
+    
+    private var searchID = Int()
     
     func setSearchID() throws {
         

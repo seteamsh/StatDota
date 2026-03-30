@@ -2,13 +2,19 @@ import SwiftUI
 
 struct PlayerInfo: View {
     
-    var vm: PlayerInfoViewModel
+    var winLose: WinLose?
+    var winLoseTurbo: WinLose?
+    
+    var winRate: Double?
+    var winRateTurbo: Double?
+    
+    let profile: Profile
     
     @Binding var isTurbo: Bool
     
     var body: some View {
         HStack(spacing: 15) {
-            AsyncImage(url: URL(string: vm.profile.avatarfull)) { image in
+            AsyncImage(url: URL(string: profile.avatarfull)) { image in
                 image
                     .resizable()
                     .scaledToFill()
@@ -24,19 +30,19 @@ struct PlayerInfo: View {
                 }
             }
             VStack(alignment: .leading, spacing: 5) {
-                Text(vm.profile.personaname)
+                Text(profile.personaname)
                     .font(.title)
                 HStack {
                     Text("WINS")
                     switch isTurbo {
                     case true:
-                        if let win = vm.winLoseTurbo?.win {
+                        if let win = winLoseTurbo?.win {
                             Text("\(win)")
                         } else {
                             ProgressView()
                         }
                     case false:
-                        if let win = vm.winLose?.win {
+                        if let win = winLose?.win {
                             Text("\(win)")
                         } else {
                             ProgressView()
@@ -47,13 +53,13 @@ struct PlayerInfo: View {
                     Text("LOSE")
                     switch isTurbo {
                     case true:
-                        if let lose = vm.winLoseTurbo?.lose {
+                        if let lose = winLoseTurbo?.lose {
                             Text("\(lose)")
                         } else {
                             ProgressView()
                         }
                     case false:
-                        if let lose = vm.winLose?.lose {
+                        if let lose = winLose?.lose {
                             Text("\(lose)")
                         } else {
                             ProgressView()
@@ -64,13 +70,13 @@ struct PlayerInfo: View {
                     Text("WINRATE")
                     switch isTurbo {
                     case true:
-                        if let winRate = vm.winRateTurbo {
+                        if let winRate = winRateTurbo {
                             Text("\(String(format: "%.2f", winRate))%")
                         } else {
                             ProgressView()
                         }
                     case false:
-                        if let winRate = vm.winRate {
+                        if let winRate = winRate {
                             Text("\(String(format: "%.2f", winRate))%")
                         } else {
                             ProgressView()
@@ -91,17 +97,5 @@ struct PlayerInfo: View {
 }
 
 #Preview {
-    PlayerInfo(
-        vm: PlayerInfoViewModel(
-            profile: Profile(
-                accountId: 1,
-                personaname: "e1",
-                avatar: "",
-                avatarmedium: "",
-                avatarfull: "",
-                profileurl: "",
-                lastLogin: ""
-            )
-        ), isTurbo: .constant(false)
-    )
+    PlayerInfo(profile: Profile.dummyData, isTurbo: .constant(false))
 }

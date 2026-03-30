@@ -24,6 +24,6 @@ struct PlayerHeroesDescriptionCard: View {
 
 #Preview {
     PlayerHeroesDescriptionCard()
-    PlayerHeroCard(vm: PlayerHeroCardViewModel(hero: MergedPlayerHeroes(id: 1, name: "Invoker", imageURL: "invoker", win: 6800, games: 3000, lastPlayed: 34234, winRate: 100)))
+    PlayerHeroCard(hero: MergedPlayerHeroes(id: 1, name: "Invoker", imageURL: "invoker", win: 6800, games: 3000, lastPlayed: 34234, winRate: 100))
 }
 

@@ -45,5 +45,5 @@ struct ProfileField: View {
 }
 
 #Preview {
-    ProfileField()
+    ProfileField(profile: Profile.dummyData)
 }

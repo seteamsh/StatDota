@@ -2,32 +2,34 @@ import SwiftUI
 
 class ProfileViewModel: ObservableObject {
     @Published var isTurbo = false
+    @Published var errorMessage: String?
+    @Published var heroes = [Hero]()
+    @Published var selectedPage: Pages = .matches
     
-    //MARK: WinLose Property-
-    @Published var winLose: WinLose?
-    @Published var winLoseTurbo: WinLose?
     
+    // MARK: - Properties WinRate
+    //2 arrays for cash
     @Published var winRate: Double?
     @Published var winRateTurbo: Double?
     
-    //
+    // MARK: - Properties WinLose
+    //2 arrays for cash
+    @Published var winLose: WinLose?
+    @Published var winLoseTurbo: WinLose?
     
-    @Published var errorMessage: String?
-    @Published var heroes = [Hero]()
-    @Published var playerHeroes = [PlayerHeroes]()
-    @Published var playerHeroesTurbo = [PlayerHeroes]()
-    @Published var selectedPage: Pages = .matches
-    @Published var mergedPlayerHeroes = [MergedPlayerHeroes]()
-    @Published var mergedPlayerHeroesTurbo = [MergedPlayerHeroes]()
+    // MARK: - PlayerHeroes Property
+    //2 arrays for cash
+    @Published var playerHeroes = [MergedPlayerHeroes]()
+    @Published var playerHeroesTurbo = [MergedPlayerHeroes]()
     
-    //MARK: Properties Load Matches -
+    // MARK: - Properties Load Matches
     @Published private(set) var isLoading = false
     @Published private(set) var canLoadMore = true
     
-    @Published var matches = [PlayerMatches]()
-    @Published var matchesTurbo = [PlayerMatches]()
-    @Published var processedMatches = [PlayerMatchesProcessed]()
-    @Published var processedMatchesTurbo = [PlayerMatchesProcessed]()
+    // MARK: - Properties matches
+    @Published var matches = [PlayerMatchesProcessed]()
+    @Published var matchesTurbo = [PlayerMatchesProcessed]()
+    
     var offset = 0
     var offsetTurbo = 0
     private var limit = 20
@@ -39,6 +41,9 @@ class ProfileViewModel: ObservableObject {
         self.profile = profiile
         loadHeroes()
         loadWinLose()
+        
+        loadPlayerHeroes(id: profile.accountId, isTurbo: isTurbo)
+        loadPlayerMatches()
     }
     
     //MARK: -WinLose Methods
@@ -72,7 +77,7 @@ class ProfileViewModel: ObservableObject {
         }
         return Double(win) / Double(win + lose) * 100
     }
-    
+    // MARK: loadHeroes -
     func loadHeroes() {
         let request = APIRequest(resource: HeroesResource())
         request.execute { result in
@@ -87,6 +92,7 @@ class ProfileViewModel: ObservableObject {
         }
     }
     
+    // MARK: loadPlayerHeroes -
     func loadPlayerHeroes(id: Int, isTurbo: Bool) {
         if !playerHeroes.isEmpty && !playerHeroesTurbo.isEmpty {
             return
@@ -99,9 +105,9 @@ class ProfileViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     switch isTurbo {
                     case true:
-                        self.playerHeroesTurbo = result ?? []
+                        self.playerHeroesTurbo = self.mergPlayerHeroes(playerHeroes: result ?? [])
                     case false:
-                        self.playerHeroes = result ?? []
+                        self.playerHeroes = self.mergPlayerHeroes(playerHeroes: result ?? [])
                     }
                 }
             case .failure(let error):
@@ -110,16 +116,7 @@ class ProfileViewModel: ObservableObject {
         }
     }
     
-    func getMergePlayerHeroes() {
-        switch isTurbo {
-            case true:
-            mergedPlayerHeroesTurbo = mergPlayerHeroes(playerHeroes: playerHeroesTurbo, heroes: heroes)
-        case false:
-            mergedPlayerHeroes = mergPlayerHeroes(playerHeroes: playerHeroes, heroes: heroes)
-        }
-    }
-    
-    func mergPlayerHeroes(playerHeroes: [PlayerHeroes], heroes: [Hero]) -> [MergedPlayerHeroes] {
+    func mergPlayerHeroes(playerHeroes: [PlayerHeroes]) -> [MergedPlayerHeroes] {
         return playerHeroes.compactMap { playerHero in
             guard let heroes = heroes.first(where: { $0.id == playerHero.heroID }) else { return nil }
             return MergedPlayerHeroes(
@@ -159,10 +156,9 @@ class ProfileViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     switch self.isTurbo {
                     case true:
-                        self.matchesTurbo += result ?? []
+                        self.matchesTurbo = self.processMatches(matches: result ?? [])
                     case false:
-                        self.matches += result ?? []
-                        
+                        self.matches = self.processMatches(matches: result ?? [])
                     }
                     self.isLoading = false
                     
@@ -170,13 +166,6 @@ class ProfileViewModel: ObservableObject {
             case .failure(let error):
                 print(error)
             }
-        }
-    }
-    
-    func getProcessMatches() {
-        switch isTurbo {
-        case true: processedMatchesTurbo = processMatches(matches: matchesTurbo)
-        case false: processedMatches = processMatches(matches: matches)
         }
     }
     

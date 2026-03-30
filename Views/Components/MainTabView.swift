@@ -9,7 +9,7 @@ struct MainTabView: View {
                 .tabItem {
                     Label("Favorites", systemImage: "heart")
                 }
-            SearchPlayerView()
+            SearchPlayerScreen()
                 .tag(MainTabViewModel.Tab.search)
                 .tabItem {
                     Label("Search", systemImage: "magnifyingglass")

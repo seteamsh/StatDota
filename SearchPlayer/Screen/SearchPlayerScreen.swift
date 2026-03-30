@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct SearchPlayerView: View {
+struct SearchPlayerScreen: View {
     
     @StateObject private var vm = SearchPlayerViewModel()
     
@@ -52,5 +52,5 @@ struct SearchPlayerView: View {
 }
 
 #Preview {
-    SearchPlayerView()
+    SearchPlayerScreen()
 }
