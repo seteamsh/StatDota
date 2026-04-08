@@ -13,7 +13,7 @@ struct HeroAsyncImage: View {
                 ZStack {
                     Rectangle()
                         .foregroundStyle(.background)
-                        .frame(width: 88, height: 50)
+                        .frame(width: 64, height: 36)
                     Image(systemName: "person")
                         .font(Font.system(size: 45))
                         .foregroundStyle(.gray)
@@ -25,7 +25,7 @@ struct HeroAsyncImage: View {
             .cacheOriginalImage()
             .fade(duration: 0.25)
             .scaledToFill()
-            .frame(width: 88, height: 50)
+            .frame(width: 64, height: 36)
             .clipped()
     }
 }

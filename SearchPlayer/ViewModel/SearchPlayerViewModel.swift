@@ -6,7 +6,7 @@ final class SearchPlayerViewModel: ObservableObject {
     @Published private(set) var profile: Profile?
     
     @Published var errorMessage: String?
-    @Published var tempSearchID = String()
+    @Published var tempSearchID = "117124649"
     
     private var searchID = Int()
     
@@ -38,16 +38,17 @@ final class SearchPlayerViewModel: ObservableObject {
         }
         let request = APIRequest(resource: ProfileResource(id: searchID))
         request.execute { result in
-            switch result {
-            case .success(let result):
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let result):
                     self.profile = result?.profile
-                }
-            case .failure(let error):
-                DispatchQueue.main.async {
+                    
+                case .failure(let error):
                     self.errorMessage = error.errorDescription
+                    
                 }
             }
+            
         }
     }
     
@@ -63,6 +64,10 @@ final class SearchPlayerViewModel: ObservableObject {
             errorMessage = error.localizedDescription
         }
     }
+}
+
+
+extension SearchPlayerViewModel {
     enum AuthenticationErrors: Error, LocalizedError {
         var minPlayerIDLength: Int {
             7

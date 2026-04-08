@@ -2,41 +2,45 @@ import Kingfisher
 import SwiftUI
 
 struct PlayerMatchCard: View {
-    var match: PlayerMatchesProcessed
+    let match: PlayerMatchesProcessed
     
     var body: some View {
-        HStack(spacing: 10) {
-            HeroAsyncImage(heroName: match.hero.name)
-                .padding(.trailing, -5)
-            
-            VStack(alignment: .leading) {
-                Text("\(match.hero.localizedName)")
-                Text("\(match.heroLastPlayed)")
+        ScrollView(.horizontal) {
+            HStack(spacing: 10) {
+                HeroAsyncImage(heroName: match.hero.name)
+                    .padding(.trailing, -3)
+                
+                VStack(alignment: .leading) {
+                    Text("\(match.hero.localizedName)")
+                        .font(.system(size: 12, weight: .medium, design: .monospaced))
+                    Text("\(match.heroLastPlayed)")
+                        .font(.system(size: 12, weight: .medium, design: .monospaced))
+                }
+                .frame(width: 151, alignment: .leading)
+                
+                Text("\(match.matchResult ?? .win)")
+                    .frame(width: 40, alignment: .leading)
+                
+                Text("\(match.gameMode)")
+                    .frame(width: 60)
+                
+                VStack(alignment: .leading) {
+                    Text(match.duration)
+                    Text("\(match.playerSide)")
+                }
+                .frame(width: 66, alignment: .leading)
+                
+                Text("\(match.kills)")
+                    .frame(width: 45, alignment: .leading)
+                
+                Text("\(match.deaths)")
+                    .frame(width: 45, alignment: .leading)
+                
+                Text("\(match.assists)")
+                    .frame(width: 45, alignment: .leading)
             }
-            .frame(width: 151, alignment: .leading)
-            
-            Text("\(match.matchResult ?? .win)")
-                .frame(width: 40, alignment: .leading)
-            
-            Text("\(match.gameMode)")
-                .frame(width: 60)
-            
-            VStack(alignment: .leading) {
-                Text(match.duration)
-                Text("\(match.playerSide)")
-            }
-            .frame(width: 66, alignment: .leading)
-            
-            Text("\(match.kills)")
-                .frame(width: 45, alignment: .leading)
-            
-            Text("\(match.deaths)")
-                .frame(width: 45, alignment: .leading)
-            
-            Text("\(match.assists)")
-                .frame(width: 45, alignment: .leading)
+            .border(.gray.opacity(0.3), width: 1)
         }
-        .border(.gray.opacity(0.3), width: 1)
         
     }
 }

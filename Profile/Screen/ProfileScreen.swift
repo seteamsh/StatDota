@@ -31,19 +31,31 @@ struct ProfileView: View {
                 case .matches:
                     PlayerMatchesView(
                         vm: PlayerMatchesViewModel(matches: vm.isTurbo ? vm.matchesTurbo : vm.matches) {
-                        vm.loadPlayerMatches()
-                        vm.offsetTurbo = 20
+                            if vm.isTurbo {
+                                vm.offsetTurbo += vm.limit
+                                vm.loadPlayerMatches()
+                            } else {
+                                vm.offset += vm.limit
+                                vm.loadPlayerMatches()
+                            }
+                            
+                            
                         }
                     )
                     //.border(.gray.opacity(0.3), width: 1)
                 }
             }
             .padding(.horizontal, 5)
-            
             .onChange(of: vm.isTurbo) {
                 vm.loadWinLose()
                 vm.loadPlayerHeroes(id: vm.profile.accountId, isTurbo: vm.isTurbo)
-                vm.loadPlayerMatches()
+                if vm.matches.isEmpty {
+                    vm.loadPlayerMatches()
+                }
+                if vm.matchesTurbo.isEmpty {
+                    vm.loadPlayerMatches()
+                }
+                
             }
         }
     }

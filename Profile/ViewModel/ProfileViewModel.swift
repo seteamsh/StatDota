@@ -1,6 +1,7 @@
 import SwiftUI
 
 class ProfileViewModel: ObservableObject {
+    
     @Published var isTurbo = false
     @Published var errorMessage: String?
     @Published var heroes = [Hero]()
@@ -32,7 +33,7 @@ class ProfileViewModel: ObservableObject {
     
     var offset = 0
     var offsetTurbo = 0
-    private var limit = 20
+    var limit = 20
     
     var pages: [Pages] = [.matches, .heroes]
     var profile: Profile
@@ -43,7 +44,7 @@ class ProfileViewModel: ObservableObject {
         loadWinLose()
         
         loadPlayerHeroes(id: profile.accountId, isTurbo: isTurbo)
-        loadPlayerMatches()
+        loadPlayerMatches( )
     }
     
     //MARK: -WinLose Methods
@@ -137,7 +138,7 @@ class ProfileViewModel: ObservableObject {
     
     //MARK: -Load Matches Service
     func loadPlayerMatches() {
-        if !matches.isEmpty && !matchesTurbo.isEmpty { return }
+        
         guard !isLoading else { return }
         
         isLoading = true
@@ -156,13 +157,15 @@ class ProfileViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     switch self.isTurbo {
                     case true:
-                        self.matchesTurbo = self.processMatches(matches: result ?? [])
+                        self.matchesTurbo += self.processMatches(matches: result ?? [])
+                        print("offsetTurbo: \(self.offsetTurbo)")
                     case false:
-                        self.matches = self.processMatches(matches: result ?? [])
+                        self.matches += self.processMatches(matches: result ?? [])
+                        print("offset: \(self.offset)")
                     }
                     self.isLoading = false
-                    
                 }
+                
             case .failure(let error):
                 print(error)
             }
