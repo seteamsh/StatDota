@@ -2,12 +2,11 @@ import SwiftUI
 
 struct SearchPlayerScreen: View {
     
-    @StateObject private var vm = SearchPlayerViewModel()
+    @ObservedObject var vm: SearchPlayerViewModel
     
     var body: some View {
         
         NavigationStack {
-            
             VStack {
                 Spacer()
                 Text("Добавить в друзья")
@@ -16,7 +15,7 @@ struct SearchPlayerScreen: View {
                 
                 ProfileField(profile: vm.profile, errorMessage: vm.errorMessage)
                 
-                SearchPlayerIDField(id: $vm.tempSearchID)
+                SearchPlayerIDField(id: $vm.searchID)
                 
                 HStack(spacing: 0) {
                     Button {
@@ -52,5 +51,7 @@ struct SearchPlayerScreen: View {
 }
 
 #Preview {
-    SearchPlayerScreen()
+    SearchPlayerScreen(
+        vm: SearchPlayerViewModel(profileRequest: APIRequest(resource: ProfileResource()))
+    )
 }

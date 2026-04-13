@@ -45,5 +45,5 @@ struct ProfileField: View {
 }
 
 #Preview {
-    ProfileField(profile: Profile.dummyData)
+    ProfileField(profile: Profile.dummyData, errorMessage: "jibberish")
 }

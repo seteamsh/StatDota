@@ -1,7 +1,7 @@
 import Foundation
 
 class APIRequest<Resource: APIResource> {
-    let resource: Resource
+    var resource: Resource
     
     init(resource: Resource) {
         self.resource = resource
