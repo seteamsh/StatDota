@@ -1,12 +1,7 @@
 import SwiftUI
 
 struct PlayerInfo: View {
-    
-    var winLose: WinLose?
-    var winLoseTurbo: WinLose?
-    
-    var winRate: Double?
-    var winRateTurbo: Double?
+    @ObservedObject var vm: ProfileStatsViewModel
     
     let profile: Profile
     
@@ -36,13 +31,13 @@ struct PlayerInfo: View {
                     Text("WINS")
                     switch isTurbo {
                     case true:
-                        if let win = winLoseTurbo?.win {
+                        if let win = vm.winLoseTurbo?.win {
                             Text("\(win)")
                         } else {
                             ProgressView()
                         }
                     case false:
-                        if let win = winLose?.win {
+                        if let win = vm.winLose?.win {
                             Text("\(win)")
                         } else {
                             ProgressView()
@@ -53,13 +48,13 @@ struct PlayerInfo: View {
                     Text("LOSE")
                     switch isTurbo {
                     case true:
-                        if let lose = winLoseTurbo?.lose {
+                        if let lose = vm.winLoseTurbo?.lose {
                             Text("\(lose)")
                         } else {
                             ProgressView()
                         }
                     case false:
-                        if let lose = winLose?.lose {
+                        if let lose = vm.winLose?.lose {
                             Text("\(lose)")
                         } else {
                             ProgressView()
@@ -70,13 +65,13 @@ struct PlayerInfo: View {
                     Text("WINRATE")
                     switch isTurbo {
                     case true:
-                        if let winRate = winRateTurbo {
+                        if let winRate = vm.winRateTurbo {
                             Text("\(String(format: "%.2f", winRate))%")
                         } else {
                             ProgressView()
                         }
                     case false:
-                        if let winRate = winRate {
+                        if let winRate = vm.winRate {
                             Text("\(String(format: "%.2f", winRate))%")
                         } else {
                             ProgressView()
@@ -97,5 +92,11 @@ struct PlayerInfo: View {
 }
 
 #Preview {
-    PlayerInfo(profile: Profile.dummyData, isTurbo: .constant(false))
+    PlayerInfo(
+        vm: ProfileStatsViewModel(profileID: 117124649),
+        profile: Profile.dummyData,
+        isTurbo: .constant(
+            false
+        )
+    )
 }

@@ -13,7 +13,9 @@ struct ProfileField: View {
     var body: some View {
         if let profile = profile {
             NavigationLink {
-                ProfileView(vm: ProfileViewModel(profiile: profile))
+                ProfileView(
+                    vm: ProfileViewModel(profiile: profile)
+                )
             } label: {
                 HStack {
                     Spacer()

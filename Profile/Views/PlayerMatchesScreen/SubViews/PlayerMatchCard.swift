@@ -11,8 +11,10 @@ struct PlayerMatchCard: View {
                     .padding(.trailing, -3)
                 
                 VStack(alignment: .leading) {
-                    Text("\(match.hero.localizedName)")
-                        .font(.system(size: 12, weight: .medium, design: .monospaced))
+                        Text(match.hero.localizedName)
+                            .font(.system(size: 12, weight: .medium, design: .monospaced))
+                    
+                    
                     Text("\(match.heroLastPlayed)")
                         .font(.system(size: 12, weight: .medium, design: .monospaced))
                 }
